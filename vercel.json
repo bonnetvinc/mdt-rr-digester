@@ -1,0 +1,4 @@
+{
+  "buildCommand": "pnpm install && pnpm db:migrate && pnpm build",
+  "outputDirectory": "dist"
+}
