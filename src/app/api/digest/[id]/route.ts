@@ -1,42 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse, type NextRequest } from 'next/server';
+import { db } from '~/server/db';
+import type { RawPassingInput } from '~/types/race-result-output';
 
-export type RawPassingInput = {
-    ID: number;
-    PID: number;
-    TimingPoint: string;
-    Result: number;
-    Time: number;
-    Invalid: boolean;
-    Bib: number;
-    Passing: {
-        Transponder: string;
-        Position: {
-            Latitude: number;
-            Longitude: number;
-            Altitude: number;
-            Flag: string;
-        };
-        Hits: number;
-        RSSI: number;
-        Battery: number;
-        Temperature: number;
-        WUC: number;
-        LoopID: number;
-        Channel: number;
-        InternalData: string;
-        StatusFlags: number;
-        DeviceID: string;
-        DeviceName: string;
-        OrderID: number;
-        Port: number;
-        IsMarker: boolean;
-        FileNo: number;
-        PassingNo: number;
-        Customer: number;
-        Received: string;
-        UTCTime: string;
-    };
-};
+
 
 async function saveRawPassing(input: RawPassingInput) {
     return db.rawPassing.create({
@@ -76,21 +42,15 @@ async function saveRawPassing(input: RawPassingInput) {
     });
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        try {
-            const body = req.body as RawPassingInput;
-            console.log('📩 Received data:', body);
-            await saveRawPassing(body);
-            res.status(200).json({ status: 'ok' });
-        } catch (err) {
-            console.error('❌ Error while saving:', err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
-    } else if (req.method === 'GET') {
-        res.status(200).json({ status: 'ok' });
-    } else {
-        res.setHeader('Allow', 'GET, POST');
-        res.status(405).end('Method Not Allowed');
+export async function POST(req: NextRequest) {
+    try {
+        const body = (await req.json()) as RawPassingInput;
+        console.log('📩 Received data:', body);
+        await saveRawPassing(body);
+        return NextResponse.json({ status: 'ok' });
+    } catch (err) {
+        console.error('❌ Error while saving:', err);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
