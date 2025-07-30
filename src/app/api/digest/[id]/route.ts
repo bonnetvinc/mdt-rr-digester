@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '@repo/database';
 
 export type RawPassingInput = {
     ID: number;
