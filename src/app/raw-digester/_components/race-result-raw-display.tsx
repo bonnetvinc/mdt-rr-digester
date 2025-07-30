@@ -3,7 +3,7 @@ import type { RawPassing } from "@prisma/client/edge";
 
 type RawDataCardProps = {
     data: RawPassing
-    };
+};
 
 function RaceResultRawDisplay({ data }: RawDataCardProps) {
   return (
