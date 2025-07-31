@@ -12,6 +12,7 @@
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
+    "db:seed": "ts-node -r dotenv/config prisma/seed.ts",
     "dev": "next dev --turbo",
     "postinstall": "prisma generate && prisma migrate deploy",
     "preview": "next build && next start",
@@ -38,9 +39,11 @@
     "@types/node": "^20.14.10",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "dotenv": "^17.2.1",
     "postcss": "^8.5.3",
     "prisma": "^6.5.0",
     "tailwindcss": "^4.0.15",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },
   "ct3aMetadata": {

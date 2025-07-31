@@ -2,48 +2,68 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model RawPassing {
-  id            Int      @id
-  pid           Int
-  timingPoint   String
-  result        Int
-  time          Float
-  invalid       Boolean
-  bib           Int
+model Team {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  transponder  Int           @unique
+  participants Participant[]
+}
 
-  // Passing fields
-  transponder    String
-  hits           Int
-  rssi           Int
-  battery        Int
-  temperature    Int
-  wuc            Int
-  loopId         Int
-  channel        Int
-  internalData   String
-  statusFlags    Int
-  deviceId       String
-  deviceName     String
-  orderId        Int
-  port           Int
-  isMarker       Boolean
-  fileNo         Int
-  passingNo      Int
-  customer       Int
-  received       DateTime
-  utcTime        DateTime
+model Participant {
+  id        Int        @id @default(autoincrement())
+  bib       Int        @unique
+  name      String?
+  laps      Lap[]
+  team      Team?      @relation(fields: [teamId], references: [id])
+  teamId    Int?
+}
 
-  // Position fields
-  latitude       Float
-  longitude      Float
-  altitude       Float
-  flag           String
+model Lap {
+  id              Int          @id @default(autoincrement())
+  startTimestamp  DateTime
+  endTimestamp    DateTime?
+  participant     Participant  @relation(fields: [participantId], references: [id])
+  participantId   Int
+  events          LapEvent[]
+  
+  @@index([participantId, startTimestamp])
+}
+
+model LapEvent {
+  id         Int        @id @default(autoincrement())
+  lap        Lap        @relation(fields: [lapId], references: [id])
+  lapId      Int
+
+  equipment  Equipment
+  timestamp  DateTime   @default(now())
+
+  bonus      Bonus?     @relation(fields: [bonusId], references: [id])
+  bonusId    Int?
+
+  @@index([lapId, equipment])
+}
+
+model Bonus {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique
+  equipment  Equipment
+  points     Int
+  events     LapEvent[]
+}
+
+enum Equipment {
+  START
+  FINISH
+  DUAL
+  EXPERT
+  ROCKGARDEN
+  ONEORTWO
 }

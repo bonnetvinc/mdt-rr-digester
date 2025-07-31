@@ -3,85 +3,71 @@ import { db } from '~/server/db';
 import type { RawPassingInput } from '~/types/race-result-output';
 
 
+type CustomRawPassingInput = {
+    bib: number;
+    transponder?: string;
+    timestamp: number;
+    borne: string;
+};
 
-async function saveRawPassing(input: RawPassingInput) {
-    return db.rawPassing.upsert({
-        where: {
-            id: input.ID
-        },
-        create: {
-            id: input.ID,
-            pid: input.PID,
-            timingPoint: input.TimingPoint,
-            result: input.Result,
-            time: input.Time,
-            invalid: input.Invalid,
-            bib: input.Bib,
-            transponder: input.Passing.Transponder,
-            hits: input.Passing.Hits,
-            rssi: input.Passing.RSSI,
-            battery: input.Passing.Battery,
-            temperature: input.Passing.Temperature,
-            wuc: input.Passing.WUC,
-            loopId: input.Passing.LoopID,
-            channel: input.Passing.Channel,
-            internalData: input.Passing.InternalData,
-            statusFlags: input.Passing.StatusFlags,
-            deviceId: input.Passing.DeviceID,
-            deviceName: input.Passing.DeviceName,
-            orderId: input.Passing.OrderID,
-            port: input.Passing.Port,
-            isMarker: input.Passing.IsMarker,
-            fileNo: input.Passing.FileNo,
-            passingNo: input.Passing.PassingNo,
-            customer: input.Passing.Customer,
-            received: new Date(input.Passing.Received),
-            utcTime: new Date(input.Passing.UTCTime),
-            latitude: input.Passing.Position.Latitude,
-            longitude: input.Passing.Position.Longitude,
-            altitude: input.Passing.Position.Altitude,
-            flag: input.Passing.Position.Flag
-        },
-        update: {
-            pid: input.PID,
-            timingPoint: input.TimingPoint,
-            result: input.Result,
-            time: input.Time,
-            invalid: input.Invalid,
-            bib: input.Bib,
-            transponder: input.Passing.Transponder,
-            hits: input.Passing.Hits,
-            rssi: input.Passing.RSSI,
-            battery: input.Passing.Battery,
-            temperature: input.Passing.Temperature,
-            wuc: input.Passing.WUC,
-            loopId: input.Passing.LoopID,
-            channel: input.Passing.Channel,
-            internalData: input.Passing.InternalData,
-            statusFlags: input.Passing.StatusFlags,
-            deviceId: input.Passing.DeviceID,
-            deviceName: input.Passing.DeviceName,
-            orderId: input.Passing.OrderID,
-            port: input.Passing.Port,
-            isMarker: input.Passing.IsMarker,
-            fileNo: input.Passing.FileNo,
-            passingNo: input.Passing.PassingNo,
-            customer: input.Passing.Customer,
-            received: new Date(input.Passing.Received),
-            utcTime: new Date(input.Passing.UTCTime),
-            latitude: input.Passing.Position.Latitude,
-            longitude: input.Passing.Position.Longitude,
-            altitude: input.Passing.Position.Altitude,
-            flag: input.Passing.Position.Flag
-        }
-    });
+function convertToCustomRawPassingInput(input: RawPassingInput): CustomRawPassingInput {
+    return {
+        bib: input.Bib,
+        transponder: input.Passing.Transponder,
+        timestamp: new Date(input.Passing.UTCTime).getTime(),
+        borne: input.TimingPoint,
+    };
 }
+
+
+async function computeUserLap(input: RawPassingInput) {
+
+    const convertedInput = convertToCustomRawPassingInput(input);
+
+    // find or create racer
+    const participant = await db.participant.upsert({
+        where: { bib: convertedInput.bib },
+        create: { bib: convertedInput.bib },
+        update: {},
+    });
+
+    if (convertedInput.borne === 'FINISH' || convertedInput.borne === 'START') {
+
+        // If the participant is already on a lap, we must close it
+        const openLap = await db.lap.findFirst({
+            where: {
+                participantId: participant.id,
+                endTimestamp: null,
+            },
+        });
+
+        if (openLap) {
+            await db.lap.update({
+                where: { id: openLap.id },
+                data: { endTimestamp: new Date(convertedInput.timestamp) },
+            });
+        }
+
+        // Create a new Lap
+        const lap = await db.lap.create({
+            data: {
+                participantId: participant.id,
+                startTimestamp: new Date(convertedInput.timestamp),
+                endTimestamp: null,
+            },
+        });
+    }
+
+
+
+}
+
 
 export async function POST(req: NextRequest) {
     try {
         const body = (await req.json()) as RawPassingInput;
         console.log('📩 Received data:', body);
-        await saveRawPassing(body);
+        await computeUserLap(body);
         return NextResponse.json({ status: 'ok' });
     } catch (err) {
         console.error('❌ Error while saving:', err);
