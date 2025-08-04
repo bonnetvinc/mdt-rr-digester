@@ -1,138 +1,125 @@
-import { Equipment, PrismaClient } from "@prisma/client";
-
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
-    // Reset the DB
-    await prisma.lapEvent.deleteMany();
-    await prisma.lap.deleteMany();
-    await prisma.participant.deleteMany();
-    await prisma.team.deleteMany();
-    await prisma.bonus.deleteMany();
+  // Reset the DB
+  await prisma.lap.deleteMany();
+  await prisma.participant.deleteMany();
+  await prisma.team.deleteMany();
+  await prisma.segment.deleteMany();
+  await prisma.equipment.deleteMany();
 
-    // Crée des bonus prédéfinis
-    await prisma.bonus.createMany({
-        data: [
-            { name: 'Start', equipment: Equipment.START, points: 0 },
-            { name: 'Finish', equipment: Equipment.FINISH, points: 5 },
-            { name: 'Rockgarden Master', equipment: Equipment.ROCKGARDEN, points: 5 },
-            { name: 'Dual Sprint', equipment: Equipment.DUAL, points: 3 },
-            { name: 'Expert', equipment: Equipment.EXPERT, points: 3 },
-            { name: 'One or Two', equipment: Equipment.ONEORTWO, points: 2 },
-        ],
-        skipDuplicates: true,
-    });
+  // Crée les équipements prédéfinis
+  const equipmentNames = ['START', 'FINISH', 'BONUS 1', 'BONUS 2', 'BONUS 3', 'BONUS 4'];
 
-    const bonuses = await prisma.bonus.findMany();
+  await Promise.all(
+    equipmentNames.map(name => {
+      return prisma.equipment.create({
+        data: { id: name }
+      });
+    })
+  );
 
-    // Crée deux équipes
-    const teamA = await prisma.team.create({
-        data: {
-            name: 'Team A',
-            transponder: 1111,
-        },
-    });
+  // Crée des segments prédéfinis
+  await prisma.segment.createMany({
+    data: [
+      { name: 'Start', equipmentId: 'START', points: 0 },
+      { name: 'Finish', equipmentId: 'FINISH', points: 5 },
+      { name: 'Rockgarden Master', equipmentId: 'BONUS 1', points: 5 },
+      { name: 'Dual Sprint', equipmentId: 'BONUS 2', points: 3 },
+      { name: 'Expert', equipmentId: 'BONUS 3', points: 3 },
+      { name: 'One or Two', equipmentId: 'BONUS 4', points: 2 }
+    ],
+    skipDuplicates: true
+  });
 
-    const teamB = await prisma.team.create({
-        data: {
-            name: 'Team B',
-            transponder: 2222,
-        },
-    });
+  const segments = await prisma.segment.findMany();
 
-    // Crée les participants
-    const [alice, bob, charlie, diana] = await Promise.all([
-        prisma.participant.create({
-            data: { bib: 101, name: 'Alice', teamId: teamA.id },
-        }),
-        prisma.participant.create({
-            data: { bib: 102, name: 'Bob', teamId: teamA.id },
-        }),
-        prisma.participant.create({
-            data: { bib: 201, name: 'Charlie', teamId: teamB.id },
-        }),
-        prisma.participant.create({
-            data: { bib: 202, name: 'Diana', teamId: teamB.id },
-        }),
-    ]);
+  // Crée deux équipes
+  const teamA = await prisma.team.create({
+    data: {
+      name: 'Team A',
+      transponder: 1111
+    }
+  });
 
-    // Crée un lap pour chaque participant
-    const now = new Date();
-    const laps = await Promise.all([
-        prisma.lap.create({
-            data: {
-                participantId: alice.id,
-                startTimestamp: now,
-                endTimestamp: new Date(now.getTime() + 1000 * 60 * 30),
-            },
-        }),
-        prisma.lap.create({
-            data: {
-                participantId: bob.id,
-                startTimestamp: now,
-                endTimestamp: new Date(now.getTime() + 1000 * 60 * 32),
-            },
-        }),
-        prisma.lap.create({
-            data: {
-                participantId: charlie.id,
-                startTimestamp: now,
-                endTimestamp: new Date(now.getTime() + 1000 * 60 * 28),
-            },
-        }),
-        prisma.lap.create({
-            data: {
-                participantId: diana.id,
-                startTimestamp: now,
-                endTimestamp: new Date(now.getTime() + 1000 * 60 * 31),
-            },
-        }),
-    ]);
+  const teamB = await prisma.team.create({
+    data: {
+      name: 'Team B',
+      transponder: 2222
+    }
+  });
 
-    // Crée des LapEvents avec des bonus
-    await prisma.lapEvent.createMany({
-        data: [
-            {
-                lapId: laps[0].id,
-                equipment: Equipment.START,
-                timestamp: now,
-            },
-            {
-                lapId: laps[0].id,
-                equipment: Equipment.ROCKGARDEN,
-                timestamp: new Date(now.getTime() + 1000 * 60 * 10),
-                // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                bonusId: bonuses.find(b => b.equipment === Equipment.ROCKGARDEN)?.id!,
-            },
-            {
-                lapId: laps[0].id,
-                equipment: Equipment.FINISH,
-                timestamp: new Date(now.getTime() + 1000 * 60 * 30),
-            },
-            {
-                lapId: laps[1].id,
-                equipment: Equipment.START,
-                timestamp: now,
-            },
-            {
-                lapId: laps[1].id,
-                equipment: Equipment.DUAL,
-                timestamp: new Date(now.getTime() + 1000 * 60 * 12),
-                // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                bonusId: bonuses.find(b => b.equipment === Equipment.DUAL)?.id!,
-            },
-        ],
-    });
+  // Crée les participants
+  const [alice, bob, charlie, diana] = await Promise.all([
+    prisma.participant.create({
+      data: { bib: 101, name: 'Alice', teamId: teamA.id }
+    }),
+    prisma.participant.create({
+      data: { bib: 102, name: 'Bob', teamId: teamA.id }
+    }),
+    prisma.participant.create({
+      data: { bib: 201, name: 'Charlie', teamId: teamB.id }
+    }),
+    prisma.participant.create({
+      data: { bib: 202, name: 'Diana', teamId: teamB.id }
+    })
+  ]);
 
-    console.log('✅ Seed completed');
+  // Crée un lap pour chaque participant
+  const now = new Date();
+  const laps = await Promise.all([
+    prisma.lap.create({
+      data: {
+        participantId: alice.id,
+        startTimestamp: now,
+        endTimestamp: new Date(now.getTime() + 1000 * 60 * 30),
+        segments: {
+          connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }]
+        }
+      }
+    }),
+    prisma.lap.create({
+      data: {
+        participantId: bob.id,
+        startTimestamp: now,
+        endTimestamp: new Date(now.getTime() + 1000 * 60 * 32),
+        segments: {
+          connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }, { id: segments[2]?.id }]
+        }
+      }
+    }),
+    prisma.lap.create({
+      data: {
+        participantId: charlie.id,
+        startTimestamp: now,
+        endTimestamp: new Date(now.getTime() + 1000 * 60 * 28),
+        segments: {
+          connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }]
+        }
+      }
+    }),
+    prisma.lap.create({
+      data: {
+        participantId: diana.id,
+        startTimestamp: now,
+        endTimestamp: new Date(now.getTime() + 1000 * 60 * 31),
+        segments: {
+          connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }]
+        }
+      }
+    })
+  ]);
+
+  console.log('✅ Seed completed');
 }
 
 main()
-    .catch((e) => {
-        console.error('❌ Seed failed', e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+  .catch(e => {
+    console.error('❌ Seed failed', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

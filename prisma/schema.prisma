@@ -17,6 +17,7 @@ model Team {
   participants Participant[]
 }
 
+
 model Participant {
   id        Int        @id @default(autoincrement())
   bib       Int        @unique
@@ -32,38 +33,23 @@ model Lap {
   endTimestamp    DateTime?
   participant     Participant  @relation(fields: [participantId], references: [id])
   participantId   Int
-  events          LapEvent[]
-  
+  segments        Segment[]    @relation("LapSegment")
+
   @@index([participantId, startTimestamp])
 }
 
-model LapEvent {
-  id         Int        @id @default(autoincrement())
-  lap        Lap        @relation(fields: [lapId], references: [id])
-  lapId      Int
 
-  equipment  Equipment
-  timestamp  DateTime   @default(now())
-
-  bonus      Bonus?     @relation(fields: [bonusId], references: [id])
-  bonusId    Int?
-
-  @@index([lapId, equipment])
-}
-
-model Bonus {
-  id         Int        @id @default(autoincrement())
+model Segment {
+  id         Int     @id @default(autoincrement())
   name       String     @unique
-  equipment  Equipment
+  equipment  Equipment? @relation(fields: [equipmentId], references: [id])
+  equipmentId String?
   points     Int
-  events     LapEvent[]
+  laps    Lap[]     @relation("LapSegment")
 }
 
-enum Equipment {
-  START
-  FINISH
-  DUAL
-  EXPERT
-  ROCKGARDEN
-  ONEORTWO
+model Equipment {
+  id         String     @id 
+  segments   Segment[]
 }
+
