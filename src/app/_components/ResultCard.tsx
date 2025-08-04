@@ -64,7 +64,7 @@ const getBonusColor = (id: number) => {
     case 6:
       return 'bg-gradient-to-r from-purple-500 to-purple-600 text-white';
     default:
-      return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white';
+      return 'bg-gradient-to-r from-gray-500 to-gray-600 text-black';
   }
 };
 
@@ -145,7 +145,7 @@ function ResultCard({
           <div className="flex items-center gap-2 text-slate-500">
             <span className="font-semibold text-sm">Dernier tour:</span>
             {participantBib && <span className="rounded-lg text-black text-xs">#{participantBib}</span>}
-            <div className="flex max-w-xs flex-wrap justify-end gap-1">
+            <div className="flex flex-wrap justify-end gap-1">
               {lastLap.bonuses?.map(bonus => (
                 <div
                   key={bonus.id}
