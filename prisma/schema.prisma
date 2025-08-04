@@ -43,7 +43,7 @@ model Segment {
   id         Int     @id @default(autoincrement())
   name       String     @unique
   equipment  Equipment? @relation(fields: [equipmentId], references: [id])
-  equipmentId String?
+  equipmentId String
   points     Int
   laps    Lap[]     @relation("LapSegment")
 }

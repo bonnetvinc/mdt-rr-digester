@@ -23,6 +23,7 @@ function IndividualResultList() {
       {sortedData?.map((participant, index) => {
         const finishedLapsList = participant.laps.filter(lap => lap.endTimestamp !== null);
         const finishedLaps = finishedLapsList.length;
+        
         // Dernier tour fini (le plus récent)
         const lastFinishedLap = finishedLapsList.reduce(
           (latest, lap) => {
@@ -34,6 +35,9 @@ function IndividualResultList() {
           },
           undefined as (typeof finishedLapsList)[0] | undefined
         );
+
+        // Tour en cours (le plus récent)
+        const currentLap = participant.laps.find(lap => lap.endTimestamp === null);
 
         return (
           <ResultCard
@@ -48,9 +52,9 @@ function IndividualResultList() {
             totalPoints={0}
             lastLap={{
               timestamp: 111,
-              bonuses:
+              segments:
                 lastFinishedLap?.segments.map(segment => ({
-                  id: segment.id,
+                  equipmentId: segment.equipmentId,
                   label: segment.name,
                   points: segment.points
                 })) ?? []
