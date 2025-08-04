@@ -23,7 +23,7 @@ function IndividualResultList() {
       {sortedData?.map((participant, index) => {
         const finishedLapsList = participant.laps.filter(lap => lap.endTimestamp !== null);
         const finishedLaps = finishedLapsList.length;
-        
+
         // Dernier tour fini (le plus récent)
         const lastFinishedLap = finishedLapsList.reduce(
           (latest, lap) => {
@@ -54,6 +54,15 @@ function IndividualResultList() {
               timestamp: 111,
               segments:
                 lastFinishedLap?.segments.map(segment => ({
+                  equipmentId: segment.equipmentId,
+                  label: segment.name,
+                  points: segment.points
+                })) ?? []
+            }}
+            currentLap={{
+              timestamp: 222,
+              segments:
+                currentLap?.segments.map(segment => ({
                   equipmentId: segment.equipmentId,
                   label: segment.name,
                   points: segment.points
