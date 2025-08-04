@@ -38,15 +38,15 @@ const getPositionIcon = (position: number) => {
   }
 };
 
-const getBonusIcon = (type: string) => {
-  switch (type) {
-    case 'speed':
+const getBonusIcon = (id: string) => {
+  switch (id) {
+    case 'BONUS 1':
       return <Zap className="h-3 w-3" />;
-    case 'technique':
+    case 'BONUS 2':
       return <Target className="h-3 w-3" />;
-    case 'endurance':
+    case 'BONUS 3':
       return <Clock className="h-3 w-3" />;
-    case 'special':
+    case 'BONUS 4':
       return <Award className="h-3 w-3" />;
     default:
       return <Award className="h-3 w-3" />;
@@ -58,7 +58,7 @@ const getBonusColor = (id: number) => {
     case 3:
       return 'bg-gradient-to-r from-blue-500 to-blue-600 text-white';
     case 4:
-      return 'bg-gradient-to-r from-black-500 to-black-600 text-white';
+      return 'bg-gradient-to-r from-orange-500 to-orange-600 text-white';
     case 5:
       return 'bg-gradient-to-r from-green-500 to-green-600 text-white';
     case 6:
