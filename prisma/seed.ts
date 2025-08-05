@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Reset the DB
-  await prisma.lap.deleteMany();
-  await prisma.participant.deleteMany();
-  await prisma.team.deleteMany();
-  await prisma.segment.deleteMany();
-  await prisma.equipment.deleteMany();
+  // await prisma.lap.deleteMany();
+  // await prisma.participant.deleteMany();
+  // await prisma.team.deleteMany();
+  // await prisma.segment.deleteMany();
+  // await prisma.equipment.deleteMany();
 
   // Crée les équipements prédéfinis
   const equipmentNames = ['START', 'FINISH', 'BONUS 1', 'BONUS 2', 'BONUS 3', 'BONUS 4'];
@@ -73,8 +73,8 @@ async function main() {
     prisma.lap.create({
       data: {
         participantId: alice.id,
-        startTimestamp: now,
-        endTimestamp: new Date(now.getTime() + 1000 * 60 * 30),
+        startTimestamp: 1,
+        endTimestamp: 4,
         segments: {
           connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }]
         }
@@ -83,8 +83,8 @@ async function main() {
     prisma.lap.create({
       data: {
         participantId: bob.id,
-        startTimestamp: now,
-        endTimestamp: new Date(now.getTime() + 1000 * 60 * 32),
+        startTimestamp: 4,
+        endTimestamp: 8,
         segments: {
           connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }, { id: segments[2]?.id }]
         }
@@ -93,8 +93,8 @@ async function main() {
     prisma.lap.create({
       data: {
         participantId: charlie.id,
-        startTimestamp: now,
-        endTimestamp: new Date(now.getTime() + 1000 * 60 * 28),
+        startTimestamp: 8,
+        endTimestamp: 67,
         segments: {
           connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }]
         }
@@ -103,8 +103,8 @@ async function main() {
     prisma.lap.create({
       data: {
         participantId: diana.id,
-        startTimestamp: now,
-        endTimestamp: new Date(now.getTime() + 1000 * 60 * 31),
+        startTimestamp: 1,
+        endTimestamp: 44,
         segments: {
           connect: [{ id: segments[0]?.id }, { id: segments[1]?.id }]
         }
