@@ -61,12 +61,12 @@ function SegmentLap({ participantBib, lap, title }: SegmentLapProps) {
             </div>
           ))}
         </div>
-        { lap?.starttime && lap?.endtime && (
-            <div className="flex items-center gap-2 text-slate-500">
-              <span className="font-semibold text-sm">Temps:</span>
-              <span className="font-bold">{formatToMinSec(lap?.starttime - lap?.endtime)}</span>
-            </div>
-          }
+        {lap?.starttime && lap?.endtime && (
+          <div className="flex items-center gap-2 text-slate-500">
+            <span className="font-semibold text-sm">Temps:</span>
+            <span className="font-bold">{formatToMinSec(lap?.starttime - lap?.endtime)}</span>
+          </div>
+        )}
       </div>
     </div>
   );

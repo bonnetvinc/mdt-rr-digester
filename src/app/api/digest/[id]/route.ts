@@ -74,9 +74,7 @@ async function computeUserLap(input: RawPassingInput) {
       }
     });
 
-    console.log(
-      `Segment ${segment.id} added to lap for participant ${participant.bib} at ${new Date(convertedInput.timestamp).toISOString()}`
-    );
+    console.log(`Segment ${segment.id} added to lap for participant ${participant.bib} `);
   }
 
   async function createNewLap() {
