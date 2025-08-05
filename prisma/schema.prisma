@@ -29,8 +29,8 @@ model Participant {
 
 model Lap {
   id              Int          @id @default(autoincrement())
-  startTimestamp  DateTime
-  endTimestamp    DateTime?
+  startTimestamp  Float
+  endTimestamp    Float?
   participant     Participant  @relation(fields: [participantId], references: [id])
   participantId   Int
   segments        Segment[]    @relation("LapSegment")

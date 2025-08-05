@@ -5,7 +5,7 @@ import type { RawPassingInput } from '~/types/race-result-output';
 type CustomRawPassingInput = {
   bib: number;
   transponder?: string;
-  timestamp: number;
+  timeinseconds: number; // Optional, if you want to store time in seconds
   borne: string;
 };
 
@@ -16,7 +16,7 @@ function convertToCustomRawPassingInput(input: RawPassingInput): CustomRawPassin
   return {
     bib: input.Bib,
     transponder: input.Passing.Transponder,
-    timestamp: new Date(input.Passing.UTCTime).getTime(),
+    timeinseconds: input.Time,
     borne: input.TimingPoint
   };
 }
@@ -28,6 +28,7 @@ async function computeUserLap(input: RawPassingInput) {
   }
 
   const convertedInput = convertToCustomRawPassingInput(input);
+  const isBoundary = convertedInput.borne === FINISH_BORNE || convertedInput.borne === START_BORNE;
 
   // find or create racer
   const participant = await db.participant.upsert({
@@ -36,7 +37,7 @@ async function computeUserLap(input: RawPassingInput) {
     update: {}
   });
 
-  if (convertedInput.borne === FINISH_BORNE || convertedInput.borne === START_BORNE) {
+  if (isBoundary) {
     // If the participant is already on a lap, we must close it
     await createNewLap();
   } else {
@@ -89,7 +90,7 @@ async function computeUserLap(input: RawPassingInput) {
     if (openLap) {
       await db.lap.update({
         where: { id: openLap.id },
-        data: { endTimestamp: new Date(convertedInput.timestamp) }
+        data: { endTimestamp: convertedInput.timeinseconds }
       });
     }
 
@@ -97,14 +98,12 @@ async function computeUserLap(input: RawPassingInput) {
     await db.lap.create({
       data: {
         participantId: participant.id,
-        startTimestamp: new Date(convertedInput.timestamp),
+        startTimestamp: convertedInput.timeinseconds,
         endTimestamp: null
       }
     });
 
-    console.log(
-      `Lap created for participant ${participant.bib} at ${new Date(convertedInput.timestamp).toISOString()}`
-    );
+    console.log(`Lap created for participant ${participant.bib}`);
   }
 }
 

@@ -1,5 +1,6 @@
 'use client';
 
+import type { Lap } from '@prisma/client';
 import ResultCard from '~/app/_components/ResultCard';
 import { api } from '~/trpc/react';
 
@@ -51,7 +52,8 @@ function IndividualResultList() {
             totalElevation={0}
             totalPoints={0}
             lastLap={{
-              timestamp: 111,
+              starttime: lastFinishedLap?.startTimestamp ?? 0,
+              endtime: lastFinishedLap?.endTimestamp ?? undefined,
               segments:
                 lastFinishedLap?.segments.map(segment => ({
                   equipmentId: segment.equipmentId,
@@ -60,7 +62,8 @@ function IndividualResultList() {
                 })) ?? []
             }}
             currentLap={{
-              timestamp: 222,
+              starttime: currentLap?.startTimestamp ?? 0,
+              endtime: currentLap?.endTimestamp ?? undefined,
               segments:
                 currentLap?.segments.map(segment => ({
                   equipmentId: segment.equipmentId,

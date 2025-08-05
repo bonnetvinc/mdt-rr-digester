@@ -1,4 +1,4 @@
-import { Award, Clock, Medal, Target, Trophy, Zap } from 'lucide-react';
+import { Award, Medal, Trophy } from 'lucide-react';
 import SegmentLap from './SegmentLap';
 
 type ResultCardProps = {
@@ -10,16 +10,17 @@ type ResultCardProps = {
   totalPoints?: number;
   totalElevation?: number;
   totalDistance?: number;
-  lastLap?: ResultCardLap;
-  currentLap?: ResultCardLap;
+  lastLap?: ResultLap;
+  currentLap?: ResultLap;
 };
 
-type ResultCardLap = {
-  timestamp: number;
-  segments?: ResultCardSegment[];
+export type ResultLap = {
+  starttime: number;
+  endtime?: number;
+  segments?: ResultSegment[];
 };
 
-type ResultCardSegment = {
+export type ResultSegment = {
   equipmentId: string;
   label: string;
   points: number;
