@@ -1,10 +1,10 @@
 import { Award, Clock, Target, Zap } from 'lucide-react';
-import type { ResultSegment } from './ResultCard';
+import type { ResultLap, ResultSegment } from './ResultCard';
 
 type SegmentLapProps = {
   participantBib?: number;
   title?: string;
-  segments: ResultSegment[];
+  lap?: ResultLap;
 };
 
 const getBonusIcon = (equipmentId: string) => {
@@ -37,14 +37,20 @@ const getBonusColor = (equipmentId: string) => {
   }
 };
 
-function SegmentLap({ participantBib, segments, title }: SegmentLapProps) {
+function formatToMinSec(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = (seconds % 60).toFixed(2).padStart(5, '0');
+  return `${minutes}:${remainingSeconds}`;
+}
+
+function SegmentLap({ participantBib, lap, title }: SegmentLapProps) {
   return (
     <div className="mt-2 flex items-center justify-between">
       <div className="flex items-center gap-2 text-slate-500">
         <span className="font-semibold text-sm">{title}</span>
         {participantBib && <span className="rounded-lg text-black text-xs">#{participantBib}</span>}
         <div className="flex flex-wrap justify-end gap-1">
-          {segments.map(segment => (
+          {lap?.segments?.map(segment => (
             <div
               key={segment.equipmentId}
               className={`flex items-center gap-1 rounded-lg px-2 py-1 font-semibold text-xs shadow-sm ${getBonusColor(segment.equipmentId)} transition-transform hover:scale-105`}
@@ -55,6 +61,12 @@ function SegmentLap({ participantBib, segments, title }: SegmentLapProps) {
             </div>
           ))}
         </div>
+        { lap?.starttime && lap?.endtime && (
+            <div className="flex items-center gap-2 text-slate-500">
+              <span className="font-semibold text-sm">Temps:</span>
+              <span className="font-bold">{formatToMinSec(lap?.starttime - lap?.endtime)}</span>
+            </div>
+          }
       </div>
     </div>
   );

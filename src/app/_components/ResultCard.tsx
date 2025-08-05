@@ -115,8 +115,8 @@ function ResultCard({
       </div>
 
       {lastLap && <SegmentLap title="Dernier tour:" participantBib={participantBib} lap={lastLap} />}
-
       {currentLap && <SegmentLap title="Tour actuel:" participantBib={participantBib} lap={currentLap} />}
+
     </div>
   );
 }
