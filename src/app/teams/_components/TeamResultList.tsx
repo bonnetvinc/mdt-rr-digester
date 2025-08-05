@@ -23,11 +23,11 @@ function IndividualResultList() {
     return { ...participant, totalPoints };
   });
 
-  // Trier les participants selon le nombre de tours finis (finishedLaps)
+  // Trier les participants selon le nombre de points puis le nombre de tours finis (finishedLaps)
   const sortedData = participantsWithPoints?.sort((a, b) => {
     const aFinishedLaps = a.laps.filter(lap => lap.endTimestamp !== null).length;
     const bFinishedLaps = b.laps.filter(lap => lap.endTimestamp !== null).length;
-    return bFinishedLaps - aFinishedLaps;
+    return b.totalPoints - a.totalPoints || bFinishedLaps - aFinishedLaps;
   });
 
   return (
