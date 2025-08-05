@@ -1,6 +1,5 @@
 'use client';
 
-import type { Lap } from '@prisma/client';
 import ResultCard from '~/app/_components/ResultCard';
 import { api } from '~/trpc/react';
 
@@ -13,7 +12,19 @@ function IndividualResultList() {
     return <div className="text-center text-gray-500">Chargement des résultats...</div>;
   }
 
-  const sortedData = data?.sort((a, b) => {
+  // Calculer totalPoints pour chaque participant sans muter l'objet original
+  const participantsWithPoints = data?.map(participant => {
+    const totalPoints = participant.laps.reduce((acc, lap) => {
+      const lapPoints = lap.segments.reduce((segAcc, segment) => {
+        return segAcc + (segment.points || 0);
+      }, 0);
+      return acc + lapPoints;
+    }, 0);
+    return { ...participant, totalPoints };
+  });
+
+  // Trier les participants selon le nombre de tours finis (finishedLaps)
+  const sortedData = participantsWithPoints?.sort((a, b) => {
     const aFinishedLaps = a.laps.filter(lap => lap.endTimestamp !== null).length;
     const bFinishedLaps = b.laps.filter(lap => lap.endTimestamp !== null).length;
     return bFinishedLaps - aFinishedLaps;
@@ -50,10 +61,10 @@ function IndividualResultList() {
             teamName={participant.name ?? ''}
             totalDistance={0}
             totalElevation={0}
-            totalPoints={0}
+            totalPoints={participant.totalPoints}
             lastLap={{
               starttime: lastFinishedLap?.startTimestamp ?? 0,
-              endtime: lastFinishedLap?.endTimestamp ?? undefined,
+              endtime: lastFinishedLap?.endTimestamp ?? 0,
               segments:
                 lastFinishedLap?.segments.map(segment => ({
                   equipmentId: segment.equipmentId,
@@ -63,7 +74,7 @@ function IndividualResultList() {
             }}
             currentLap={{
               starttime: currentLap?.startTimestamp ?? 0,
-              endtime: currentLap?.endTimestamp ?? undefined,
+              endtime: undefined,
               segments:
                 currentLap?.segments.map(segment => ({
                   equipmentId: segment.equipmentId,
