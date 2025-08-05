@@ -29,6 +29,7 @@ function IndividualResultList() {
     const bFinishedLaps = b.laps.filter(lap => lap.endTimestamp !== null).length;
     return b.totalPoints - a.totalPoints || bFinishedLaps - aFinishedLaps;
   });
+  
 
   return (
     <div className="mx-auto w-full space-y-4 p-4">
