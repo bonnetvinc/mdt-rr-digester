@@ -6,6 +6,7 @@ import { api } from '~/trpc/react';
 type Segment = {
   id: number;
   name: string;
+  equipmentId: string;
   points: number;
   type: 'START' | 'FINISH' | 'BONUS';
   distance: number;
@@ -51,6 +52,16 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
             onChange={e => handleChange('name', e.target.value)}
           />
           <input
+            className="w-32 rounded border px-1 py-0.5 text-sm"
+            value={formData.equipmentId}
+            onChange={e => handleChange('equipmentId', e.target.value)}
+          />
+          <input
+            className="w-32 rounded border px-1 py-0.5 text-sm"
+            value={formData.type}
+            onChange={e => handleChange('type', e.target.value)}
+          />
+          <input
             className="w-16 rounded border px-1 py-0.5 text-sm"
             type="number"
             value={formData.points}
@@ -89,6 +100,7 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
       ) : (
         <>
           <span className="w-32 font-semibold">{formData.name}</span>
+          <span className="w-32">{formData.equipmentId}</span>
           <span className="w-16">{formData.type}</span>
           <span className="w-16">{formData.points} pts</span>
           <span className="w-16">{formData.distance} m</span>

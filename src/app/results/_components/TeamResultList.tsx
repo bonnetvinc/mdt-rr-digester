@@ -43,6 +43,8 @@ function IndividualResultList() {
     return b.totalPoints - a.totalPoints || bFinishedLaps - aFinishedLaps;
   });
 
+  console.info('Sorted participant data:', sortedData);
+
   return (
     <div className="mx-auto w-full space-y-1 p-2">
       {sortedData?.map((participant, index) => {

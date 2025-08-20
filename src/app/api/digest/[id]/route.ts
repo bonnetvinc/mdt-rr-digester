@@ -1,3 +1,4 @@
+import { SegmentType } from '@prisma/client';
 import { type NextRequest, NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import type { RawPassingInput } from '~/types/race-result-output';
@@ -24,14 +25,15 @@ async function computeUserLap(input: RawPassingInput) {
 
   // Récupérer les bornes START et FINISH depuis la BD
   const boundarySegments = await db.segment.findMany({
-    where: { type: { in: ['START', 'FINISH'] } },
+    where: { type: { in: [SegmentType.START, SegmentType.FINISH] } },
     select: { equipmentId: true, type: true }
   });
 
-  const startBorne = boundarySegments.find(s => s.type === 'START')?.equipmentId;
-  const finishBorne = boundarySegments.find(s => s.type === 'FINISH')?.equipmentId;
+  const startBorne = boundarySegments.find(s => s.type === SegmentType.START)?.equipmentId;
+  const finishBorne = boundarySegments.find(s => s.type === SegmentType.FINISH)?.equipmentId;
 
-  const isBoundary = convertedInput.borne === startBorne || convertedInput.borne === finishBorne;
+  const isStartBoundary = convertedInput.borne === startBorne;
+  const isFinishBoundary = convertedInput.borne === finishBorne;
 
   // find or create participant
   const participant = await db.participant.upsert({
@@ -55,24 +57,30 @@ async function computeUserLap(input: RawPassingInput) {
     where: { participantId: participant.id, endTimestamp: null }
   });
 
-  // If start/finish, close current lap and create new lap
-  if (isBoundary) {
+  if (isFinishBoundary) {
     if (openLap) {
       await db.lap.update({
         where: { id: openLap.id },
         data: { endTimestamp: convertedInput.timeinseconds }
       });
-    }
 
+      await db.lapEvent.create({
+        data: {
+          lapId: openLap.id,
+          segmentId: segment.id,
+          timestamp: convertedInput.timeinseconds
+        }
+      });
+    }
+  } else if (isStartBoundary) {
+    // Start a new lap if its a double start
     openLap = await db.lap.create({
       data: { participantId: participant.id, startTimestamp: convertedInput.timeinseconds }
     });
-
-    console.log(`Lap created for participant ${participant.bib}`);
   }
 
-  // Add LapEvent for this segment
-  if (openLap) {
+  if (!isStartBoundary && !isFinishBoundary && openLap) {
+    // For bonus segments only
     await db.lapEvent.create({
       data: {
         lapId: openLap.id,
