@@ -7,6 +7,7 @@ type Segment = {
   id: number;
   name: string;
   points: number;
+  type: 'START' | 'FINISH' | 'BONUS';
   distance: number;
   elevation: number;
 };
@@ -88,6 +89,7 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
       ) : (
         <>
           <span className="w-32 font-semibold">{formData.name}</span>
+          <span className="w-16">{formData.type}</span>
           <span className="w-16">{formData.points} pts</span>
           <span className="w-16">{formData.distance} m</span>
           <span className="w-16">{formData.elevation} m</span>
