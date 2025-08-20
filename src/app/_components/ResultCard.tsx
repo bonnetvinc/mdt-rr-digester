@@ -41,7 +41,6 @@ const getPositionIcon = (position: number) => {
   }
 };
 
-
 function ResultCard({
   id,
   position,
@@ -60,20 +59,20 @@ function ResultCard({
       className="group relative flex flex-col rounded-lg border border-slate-200 bg-white shadow-sm transition-transform duration-200 hover:scale-[1.02]"
     >
       {/* Barre verticale pour la position */}
-      <div className={`absolute left-0 top-0 h-full w-1 ${position <= 3 ? 'bg-yellow-400' : 'bg-slate-300'}`}></div>
+      <div className={`absolute top-0 left-0 h-full w-1 ${position <= 3 ? 'bg-yellow-400' : 'bg-slate-300'}`}></div>
 
       {/* Ligne principale : position + infos */}
       <div className="flex items-center justify-between p-2 pl-4">
         {/* Position */}
         <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-white text-xs font-bold shadow-sm">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 font-bold text-white text-xs shadow-sm">
             {getPositionIcon(position)}
           </div>
-          <span className="font-semibold text-sm text-slate-800">{teamName}</span>
+          <span className="font-semibold text-slate-800 text-sm">{teamName}</span>
         </div>
 
         {/* Stats principales */}
-        <div className="flex items-center gap-3 text-xs text-slate-600">
+        <div className="flex items-center gap-3 text-slate-600 text-xs">
           <div className="flex items-center gap-1">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
             <span>{finishedLaps}</span>
@@ -94,13 +93,12 @@ function ResultCard({
       </div>
 
       {/* Tours */}
-      <div className="flex flex-col gap-1 border-t border-slate-100 px-2 py-1">
-        {lastLap && <SegmentLap title="Dernier tour" participantBib={participantBib} lap={lastLap} compact />}
-        {currentLap && <SegmentLap title="Tour actuel" participantBib={participantBib} lap={currentLap} compact />}
+      <div className="flex flex-col gap-1 border-slate-100 border-t px-1 py-1">
+        {lastLap && <SegmentLap title="Dernier tour" participantBib={participantBib} lap={lastLap} />}
+        {currentLap && <SegmentLap title="Tour actuel" participantBib={participantBib} lap={currentLap} />}
       </div>
     </div>
   );
 }
-
 
 export default ResultCard;
