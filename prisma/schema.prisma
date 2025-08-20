@@ -18,7 +18,6 @@ model Team {
   participants Participant[]
 }
 
-
 model Participant {
   id        Int        @id @default(autoincrement())
   bib       Int        @unique
@@ -27,6 +26,7 @@ model Participant {
   team      Team?      @relation(fields: [teamId], references: [id])
   teamId    Int?
 }
+
 model Lap {
   id              Int          @id @default(autoincrement())
   startTimestamp  Float

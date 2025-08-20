@@ -93,9 +93,17 @@ function ResultCard({
       </div>
 
       {/* Tours */}
-      <div className="flex flex-col gap-1 border-slate-100 border-t px-1 py-1">
-        {lastLap && <SegmentLap title="Dernier tour" participantBib={participantBib} lap={lastLap} />}
-        {currentLap && <SegmentLap title="Tour actuel" participantBib={participantBib} lap={currentLap} />}
+      <div className="flex flex-row items-center gap-2 border-slate-100 border-t px-1 py-1">
+        {/* Dernier tour */}
+        <div className="flex-1">{lastLap && <SegmentLap title="" participantBib={participantBib} lap={lastLap} />}</div>
+
+        {/* Séparateur */}
+        {lastLap && currentLap && <div className="flex-shrink-0 px-2 text-center text-slate-300">|</div>}
+
+        {/* Tour actuel */}
+        <div className="flex flex-1 justify-end px-2">
+          {currentLap && <SegmentLap title="" participantBib={participantBib} lap={currentLap} />}
+        </div>
       </div>
     </div>
   );

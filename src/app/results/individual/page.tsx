@@ -1,9 +1,9 @@
-import ParticipantsResultList from './_components/TeamResultList';
+import ParticipantsResultList from '../_components/TeamResultList';
 
 function DisplayResults() {
   return (
     <>
-      <div>Team Results</div>
+      <div>Classement Individuel</div>
       <ParticipantsResultList />
     </>
   );

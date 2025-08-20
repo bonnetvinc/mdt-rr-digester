@@ -1,19 +1,24 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { Toaster } from '~/components/ui/sonner';
 
 export default async function Home() {
-
   return (
-  <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100 text-black">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100 text-black">
       <nav className="flex w-full justify-center py-4">
-        <ul className="flex gap-6 rounded-lg bg-white/100 px-6 py-2 text-lg font-semibold shadow">
+        <ul className="flex gap-6 rounded-lg bg-white/100 px-6 py-2 font-semibold text-lg shadow">
           {/* <li>
             <Link href="/individual" className="hover:underline">
               Individuel
             </Link>
           </li> */}
           <li>
-            <Link href="/teams" className="hover:underline">
-              Teams
+            <Link href="/results/teams" className="hover:underline">
+              Equipes
+            </Link>
+          </li>
+          <li>
+            <Link href="/results/individual" className="hover:underline">
+              Individuels
             </Link>
           </li>
           <li>
@@ -23,6 +28,7 @@ export default async function Home() {
           </li>
         </ul>
       </nav>
+      <Toaster richColors />
     </main>
   );
 }

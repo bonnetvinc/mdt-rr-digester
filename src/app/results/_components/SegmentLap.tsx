@@ -45,27 +45,39 @@ function formatToMinSec(seconds: number) {
 
 function SegmentLap({ participantBib, lap, title }: SegmentLapProps) {
   return (
-    <div className="mt-2 flex items-center justify-between">
-      <div className="flex items-center gap-2 text-slate-500">
-        <span className="font-semibold text-sm">{title}</span>
-        {participantBib && <span className="rounded-lg text-black text-xs">#{participantBib}</span>}
-        <div className="flex flex-wrap justify-end gap-1">
-          {lap?.segments?.map(segment => (
-            <div
-              key={segment.equipmentId}
-              className={`flex items-center gap-1 rounded-lg px-2 py-1 font-semibold text-xs shadow-sm ${getBonusColor(segment.equipmentId)} transition-transform hover:scale-105`}
-            >
-              {segment.label && getBonusIcon(segment.label)}
-              <span className="max-w-16 truncate">{segment.label}</span>
-              <span className="font-bold">+{segment.points}</span>
-            </div>
-          ))}
-        </div>
-        {lap?.starttime && lap?.endtime && (
-          <div className="flex items-center gap-2 text-slate-500">
-            <span className="font-semibold text-sm">Temps:</span>
-            <span className="font-bold">{formatToMinSec(lap?.endtime - lap?.starttime)}</span>
+    <div className="flex w-full items-center gap-2 text-xs">
+      {/* Titre et numéro */}
+      <div className="flex flex-shrink-0 items-center gap-2">
+        <span className="font-semibold">{title}</span>
+        {participantBib && (
+          <span className="rounded-lg bg-slate-200 px-1 py-0.5 font-medium text-black">#{participantBib}</span>
+        )}
+      </div>
+
+      {/* Segments du tour */}
+      <div className="flex flex-1 flex-wrap gap-1">
+        {lap?.segments?.map(segment => (
+          <div
+            key={segment.equipmentId}
+            className={`flex items-center gap-1 rounded-lg px-2 py-1 shadow-sm ${getBonusColor(
+              segment.equipmentId
+            )} transition-transform hover:scale-105`}
+          >
+            {segment.label && getBonusIcon(segment.label)}
+            <span className="max-w-[60px] truncate">{segment.label}</span>
+            <span className="font-bold">+{segment.points}</span>
           </div>
+        ))}
+      </div>
+
+      {/* Statut / temps aligné à droite */}
+      <div className="flex-shrink-0 text-slate-500">
+        {!lap?.endtime ? (
+          <span className="font-semibold">En Cours</span>
+        ) : (
+          <span>
+            Temps: <span className="font-bold">{formatToMinSec(lap.endtime - lap.starttime)}</span>
+          </span>
         )}
       </div>
     </div>

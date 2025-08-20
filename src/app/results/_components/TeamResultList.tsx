@@ -1,6 +1,6 @@
 'use client';
 
-import ResultCard from '~/app/_components/ResultCard';
+import ResultCard from '~/app/results/_components/ResultCard';
 import { api } from '~/trpc/react';
 
 function IndividualResultList() {
@@ -44,7 +44,7 @@ function IndividualResultList() {
   });
 
   return (
-    <div className="mx-auto w-full space-y-4 p-4">
+    <div className="mx-auto w-full space-y-1 p-2">
       {sortedData?.map((participant, index) => {
         // Laps finis
         const finishedLapsList = participant.laps.filter(lap => lap.endTimestamp != null);
