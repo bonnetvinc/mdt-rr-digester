@@ -1,5 +1,5 @@
 import { Award, Clock, Target, Zap } from 'lucide-react';
-import type { ResultLap, ResultSegment } from './ResultCard';
+import type { ResultLap } from './ResultCard';
 
 type SegmentLapProps = {
   participantBib?: number;

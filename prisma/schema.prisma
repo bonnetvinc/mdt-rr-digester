@@ -5,6 +5,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -26,26 +27,36 @@ model Participant {
   team      Team?      @relation(fields: [teamId], references: [id])
   teamId    Int?
 }
-
 model Lap {
   id              Int          @id @default(autoincrement())
   startTimestamp  Float
   endTimestamp    Float?
   participant     Participant  @relation(fields: [participantId], references: [id])
   participantId   Int
-  segments        Segment[]    @relation("LapSegment")
+  events          LapEvent[]
 
   @@index([participantId, startTimestamp])
 }
 
-
 model Segment {
-  id         Int     @id @default(autoincrement())
-  name       String     @unique
-  equipment  Equipment? @relation(fields: [equipmentId], references: [id])
-  equipmentId String
-  points     Int
-  laps    Lap[]     @relation("LapSegment")
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  type        SegmentType   // START, FINISH, BONUS
+  equipment   Equipment?    @relation(fields: [equipmentId], references: [id])
+  equipmentId String?
+  points      Int           @default(0)   // points attribués quand on passe dessus
+  distance    Float         @default(0)
+  elevation   Float         @default(0)
+  events      LapEvent[]
+}
+
+model LapEvent {
+  id          Int        @id @default(autoincrement())
+  lap         Lap        @relation(fields: [lapId], references: [id])
+  lapId       Int
+  segment     Segment    @relation(fields: [segmentId], references: [id])
+  segmentId   Int
+  timestamp   Float
 }
 
 model Equipment {
@@ -53,3 +64,8 @@ model Equipment {
   segments   Segment[]
 }
 
+enum SegmentType {
+  START
+  FINISH
+  BONUS
+}

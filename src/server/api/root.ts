@@ -1,6 +1,7 @@
-import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { participantResultsRouter } from "./routers/participant-results-router";
-import { adminActionRouter } from "./routers/admin-actions-router";
+import { createCallerFactory, createTRPCRouter } from '~/server/api/trpc';
+import { adminActionRouter } from './routers/admin-actions-router';
+import { participantResultsRouter } from './routers/participant-results-router';
+import { segmentRouter } from './routers/segment-manager';
 
 /**
  * This is the primary router for your server.
@@ -9,7 +10,8 @@ import { adminActionRouter } from "./routers/admin-actions-router";
  */
 export const appRouter = createTRPCRouter({
   participantResults: participantResultsRouter,
-  adminActions: adminActionRouter
+  adminActions: adminActionRouter,
+  segments: segmentRouter
 });
 
 // export type definition of API

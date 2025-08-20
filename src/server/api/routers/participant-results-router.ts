@@ -6,7 +6,11 @@ export const participantResultsRouter = createTRPCRouter({
       include: {
         laps: {
           include: {
-            segments: true
+            events: {
+              include: {
+                segment: true
+              }
+            }
           }
         }
       }

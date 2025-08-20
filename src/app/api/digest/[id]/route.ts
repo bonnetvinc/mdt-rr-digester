@@ -5,21 +5,9 @@ import type { RawPassingInput } from '~/types/race-result-output';
 type CustomRawPassingInput = {
   bib: number;
   transponder?: string;
-  timeinseconds: number; // Optional, if you want to store time in seconds
+  timeinseconds: number;
   borne: string;
 };
-
-const START_BORNE = 'START';
-const FINISH_BORNE = 'FINISH';
-
-function convertToCustomRawPassingInput(input: RawPassingInput): CustomRawPassingInput {
-  return {
-    bib: input.Bib,
-    transponder: input.Passing.Transponder,
-    timeinseconds: input.Time,
-    borne: input.TimingPoint
-  };
-}
 
 async function computeUserLap(input: RawPassingInput) {
   if (input.Invalid) {
@@ -27,64 +15,48 @@ async function computeUserLap(input: RawPassingInput) {
     return;
   }
 
-  const convertedInput = convertToCustomRawPassingInput(input);
-  const isBoundary = convertedInput.borne === FINISH_BORNE || convertedInput.borne === START_BORNE;
+  const convertedInput: CustomRawPassingInput = {
+    bib: input.Bib,
+    transponder: input.Passing.Transponder,
+    timeinseconds: input.Time,
+    borne: input.TimingPoint
+  };
 
-  // find or create racer
+  // Récupérer les bornes START et FINISH depuis la BD
+  const boundarySegments = await db.segment.findMany({
+    where: { type: { in: ['START', 'FINISH'] } },
+    select: { equipmentId: true, type: true }
+  });
+
+  const startBorne = boundarySegments.find(s => s.type === 'START')?.equipmentId;
+  const finishBorne = boundarySegments.find(s => s.type === 'FINISH')?.equipmentId;
+
+  const isBoundary = convertedInput.borne === startBorne || convertedInput.borne === finishBorne;
+
+  // find or create participant
   const participant = await db.participant.upsert({
     where: { bib: convertedInput.bib },
     create: { bib: convertedInput.bib },
     update: {}
   });
 
-  if (isBoundary) {
-    // If the participant is already on a lap, we must close it
-    await createNewLap();
-  } else {
-    // If the participant is not at a start or finish point, we do nothing
-    const segment = await db.segment.findFirst({
-      where: { equipmentId: convertedInput.borne }
-    });
+  // find segment
+  const segment = await db.segment.findFirst({
+    where: { equipmentId: convertedInput.borne }
+  });
 
-    if (!segment) {
-      console.warn(`No segment found for borne ${convertedInput.borne}`);
-      return;
-    }
-
-    // Add the segment to the current lap
-    const openLap = await db.lap.findFirst({
-      where: {
-        participantId: participant.id,
-        endTimestamp: null // Only consider open laps
-      }
-    });
-
-    if (!openLap) {
-      console.warn(`No open lap found for participant ${participant.bib}`);
-      return;
-    }
-
-    // Add the segment to the current lap
-    await db.lap.update({
-      where: { id: openLap.id },
-      data: {
-        segments: {
-          connect: { id: segment.id }
-        }
-      }
-    });
-
-    console.log(`Segment ${segment.id} added to lap for participant ${participant.bib} `);
+  if (!segment) {
+    console.warn(`No segment found for borne ${convertedInput.borne}`);
+    return;
   }
 
-  async function createNewLap() {
-    const openLap = await db.lap.findFirst({
-      where: {
-        participantId: participant.id,
-        endTimestamp: null
-      }
-    });
+  // Check for an open lap
+  let openLap = await db.lap.findFirst({
+    where: { participantId: participant.id, endTimestamp: null }
+  });
 
+  // If start/finish, close current lap and create new lap
+  if (isBoundary) {
     if (openLap) {
       await db.lap.update({
         where: { id: openLap.id },
@@ -92,16 +64,24 @@ async function computeUserLap(input: RawPassingInput) {
       });
     }
 
-    // Create a new Lap
-    await db.lap.create({
-      data: {
-        participantId: participant.id,
-        startTimestamp: convertedInput.timeinseconds,
-        endTimestamp: null
-      }
+    openLap = await db.lap.create({
+      data: { participantId: participant.id, startTimestamp: convertedInput.timeinseconds }
     });
 
     console.log(`Lap created for participant ${participant.bib}`);
+  }
+
+  // Add LapEvent for this segment
+  if (openLap) {
+    await db.lapEvent.create({
+      data: {
+        lapId: openLap.id,
+        segmentId: segment.id,
+        timestamp: convertedInput.timeinseconds
+      }
+    });
+
+    console.log(`Segment ${segment.name} added to lap for participant ${participant.bib}`);
   }
 }
 

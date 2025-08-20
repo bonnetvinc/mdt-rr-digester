@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "public"."Segment" ADD COLUMN     "distance" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "elevation" DOUBLE PRECISION NOT NULL DEFAULT 0;
