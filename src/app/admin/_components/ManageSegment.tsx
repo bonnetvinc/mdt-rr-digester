@@ -33,7 +33,6 @@ function ManageSegment() {
           key={item.id}
           segment={item}
           handleDelete={() => setSelectedSegmentId(item.id)}
-          handleEdit={() => console.log('Edit segment', item.id)}
         />
       ))}
       <ConfirmationAlert
