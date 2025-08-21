@@ -14,13 +14,19 @@ interface SegmentLapProps {
 }
 
 function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
-  const formatTime = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString('fr-FR', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  function formatTime(seconds: number) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = (seconds % 60).toFixed(0).padStart(5, '0');
+    return `${minutes}:${remainingSeconds}`;
+  }
+
+  //   const formatTime = (timestamp: number) => {
+  //     const date = new Date(timestamp);
+  //     return date.toLocaleTimeString('fr-FR', {
+  //       hour: '2-digit',
+  //       minute: '2-digit'
+  //     });
+  //   };
 
   const isActive = !lap.endtime;
   const isNotStarted = !lap.starttime;
