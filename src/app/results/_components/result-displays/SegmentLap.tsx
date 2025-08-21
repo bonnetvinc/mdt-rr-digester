@@ -42,7 +42,6 @@ function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
       ></FlagTriangleRightIcon>
       <div className="flex items-center gap-1">
         <div className="text-xs">
-          <span className="font-medium">{lapNumber}</span>
           <span className="ml-1 text-gray-400">
             {lap.endtime ? formatTime(lap.endtime - lap.starttime) : "--:--"}
           </span>
