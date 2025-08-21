@@ -73,8 +73,7 @@ async function computeUserLap(input: RawPassingInput) {
       });
     }
   } else if (isStartBoundary) {
-    // Start a new lap if its a double start
-    openLap = await db.lap.create({
+     openLap = await db.lap.create({
       data: { participantId: participant.id, startTimestamp: convertedInput.timeinseconds }
     });
   }
