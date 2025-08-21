@@ -14,8 +14,7 @@ function DisplayResults() {
             </div>
             <div className="text-right text-sm">
               <div className="flex items-center gap-1 text-xl">
-                <Clock className="h-4 w-4 " />
-                <Link href="/results/individual" className="hover:underline">
+                <Link href="/admin" className="hover:underline">
                   Admin
                 </Link>
                 {/* {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} */}
