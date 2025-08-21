@@ -24,6 +24,11 @@ function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
 
   const isActive = !lap.endtime;
 
+  if (isActive) {
+    // Do something for active lap
+    return '--:--';
+  }
+
   return (
     <div className="flex items-center gap-2">
       <FlagTriangleRightIcon
@@ -32,7 +37,9 @@ function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
       <div className="flex items-center gap-1">
         <div className="text-xs">
           <span className="font-medium">{lapNumber}</span>
-          <span className="ml-1 text-gray-400">{lap.endtime ? formatTime(lap.endtime - lap.starttime) : '--:--'}</span>
+          <span className="ml-1 text-gray-400">
+            {lap.endtime ? formatTime(lap.endtime - lap.starttime) : formatTime(lap.starttime)}
+          </span>
         </div>
       </div>
       {lap.segments && lap.segments.length > 0 && (
