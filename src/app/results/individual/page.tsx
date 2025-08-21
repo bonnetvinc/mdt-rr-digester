@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react';
+import { Clock, Link } from 'lucide-react';
 import TeamResultV2 from '../_components/result-displays/TeamResultV2';
 
 function DisplayResults() {
@@ -15,6 +15,9 @@ function DisplayResults() {
             <div className="text-right text-sm">
               <div className="flex items-center gap-1 text-xl">
                 <Clock className="h-4 w-4 " />
+                <Link href="/results/individual" className="hover:underline">
+                  Admin
+                </Link>
                 {/* {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} */}
               </div>
             </div>
