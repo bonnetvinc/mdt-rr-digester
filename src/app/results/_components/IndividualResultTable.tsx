@@ -1,8 +1,10 @@
 'use client';
 
+import { FlagTriangleRightIcon, GaugeCircleIcon, MountainSnowIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
 import { api } from '~/trpc/react';
-import PositionIcon from './PositionIcon';
+import PositionIcon from './PositionMarker';
+import PositionMarker from './PositionMarker';
 import SegmentLap from './SegmentLap';
 
 function IndividualResultTable() {
@@ -98,7 +100,7 @@ function IndividualResultTable() {
             return (
               <TableRow key={participant.id}>
                 <TableCell className="font-medium">
-                  <PositionIcon position={index + 1} />
+                  <PositionMarker position={index + 1} />
                 </TableCell>
                 <TableCell>{participant.name}</TableCell>
 
@@ -110,10 +112,21 @@ function IndividualResultTable() {
                   <SegmentLap lap={currentLapData} lapNumber={finishedLaps + 1} />
                 </TableCell>
 
-                <TableCell>{finishedLaps}</TableCell>
-                <TableCell>{participant.totalDistance}</TableCell>
-                <TableCell>{participant.totalElevation}</TableCell>
-                <TableCell className="text-right">{participant.totalPoints}</TableCell>
+                <TableCell>
+                  {finishedLaps}
+                  <FlagTriangleRightIcon className="inline h-4 w-4 text-blue-500" />
+                </TableCell>
+                <TableCell>
+                  {participant.totalDistance}
+                  <GaugeCircleIcon className="inline h-4 w-4 text-green-500" />
+                </TableCell>
+                <TableCell>
+                  {participant.totalElevation}
+                  <MountainSnowIcon className="inline h-4 w-4 text-black-500" />
+                </TableCell>
+                <TableCell className="rounded-lg border border-blue-500 px-2 py-1 text-right font-bold">
+                  {participant.totalPoints}
+                </TableCell>
               </TableRow>
             );
           })}

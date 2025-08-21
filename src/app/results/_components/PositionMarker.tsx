@@ -19,4 +19,12 @@ function PositionIcon({ position }: PositionIconProps) {
   }
 }
 
-export default PositionIcon;
+function PositionMarker({ position }: PositionIconProps) {
+  return (
+    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-800 text-white shadow-sm">
+      <PositionIcon position={position} />
+    </div>
+  );
+}
+
+export default PositionMarker;
