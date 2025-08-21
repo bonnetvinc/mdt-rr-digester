@@ -127,8 +127,8 @@ function IndividualResultTable() {
                   <span>&nbsp;</span>
                   <MountainSnowIcon className="inline h-4 w-4 text-black-500" />
                 </TableCell>
-                <TableCell className="rounded-lg border border-blue-500 px-2 py-1 text-right font-bold">
-                  <span className="font-bold text-blue-500">{participant.totalPoints}</span>
+                <TableCell className="rounded-xl border border-blue-300 bg-blue-50 px-3 py-2 text-right font-bold shadow-sm transition-shadow duration-200 hover:shadow-md">
+                  <span className="text-blue-600">{participant.totalPoints}</span>
                 </TableCell>
               </TableRow>
             );
