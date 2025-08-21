@@ -2,6 +2,7 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
 import { api } from '~/trpc/react';
+import PositionIcon from './PositionIcon';
 import SegmentLap from './SegmentLap';
 
 function IndividualResultTable() {
@@ -96,7 +97,9 @@ function IndividualResultTable() {
 
             return (
               <TableRow key={participant.id}>
-                <TableCell className="font-medium">{index + 1}</TableCell>
+                <TableCell className="font-medium">
+                  <PositionIcon position={index + 1} />
+                </TableCell>
                 <TableCell>{participant.name}</TableCell>
 
                 <TableCell>{participant.bib}</TableCell>
