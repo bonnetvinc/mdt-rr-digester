@@ -13,6 +13,13 @@ function formatToMinSec(seconds: number) {
 }
 
 function SegmentLap({ lap, lapNumber = 0 }: SegmentLapProps) {
+  if (!lap || !lap.starttime) {
+    return (
+      <div className="flex items-center justify-center text-gray-500">
+        <span className="text-xs">-</span>
+      </div>
+    );
+  }
   return (
     <div className="flex w-full items-center justify-between overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Bandeau avec numéro du tour */}
