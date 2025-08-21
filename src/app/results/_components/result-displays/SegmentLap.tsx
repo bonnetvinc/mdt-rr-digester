@@ -16,7 +16,7 @@ interface SegmentLapProps {
 function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
   function formatTime(seconds: number) {
     const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = (seconds % 60).toFixed(0).padStart(5, '0');
+    const remainingSeconds = (seconds % 60).toFixed(2).padStart(5, '0');
     return `${minutes}:${remainingSeconds}`;
   }
 
