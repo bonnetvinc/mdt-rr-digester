@@ -113,19 +113,22 @@ function IndividualResultTable() {
                 </TableCell>
 
                 <TableCell>
-                  {finishedLaps}
+                  <span className="font-bold text-blue-500">{finishedLaps}</span>
+                  <span>&nbsp;</span>
                   <FlagTriangleRightIcon className="inline h-4 w-4 text-blue-500" />
                 </TableCell>
                 <TableCell>
-                  {participant.totalDistance}
+                  <span className="font-bold text-green-500">{participant.totalDistance}</span>
+                  <span>&nbsp;</span>
                   <GaugeCircleIcon className="inline h-4 w-4 text-green-500" />
                 </TableCell>
                 <TableCell>
-                  {participant.totalElevation}
+                  <span className="font-bold text-black-500">{participant.totalElevation}</span>
+                  <span>&nbsp;</span>
                   <MountainSnowIcon className="inline h-4 w-4 text-black-500" />
                 </TableCell>
                 <TableCell className="rounded-lg border border-blue-500 px-2 py-1 text-right font-bold">
-                  {participant.totalPoints}
+                  <span className="font-bold text-blue-500">{participant.totalPoints}</span>
                 </TableCell>
               </TableRow>
             );
