@@ -23,7 +23,7 @@ function SegmentLap({ lap, lapNumber = 0 }: SegmentLapProps) {
       {/* Segments */}
       <div className="flex gap-1">
         {lap?.segments?.map(segment => (
-          <Badge key={segment.equipmentId} className={`bg-${segment.color}-500 text-white dark:bg-blue-600`}>
+          <Badge key={segment.equipmentId} className={`bg-blue-500 text-white dark:bg-blue-600`}>
             <span className="truncate">{segment.label}</span>
             <span className="font-bold text-xs">+{segment.points}</span>
           </Badge>

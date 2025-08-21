@@ -1,10 +1,10 @@
-import ParticipantsResultList from '../_components/TeamResultList';
+import IndividualResultTable from '../_components/IndividualResultTable';
 
 function DisplayResults() {
   return (
     <>
       <div>Classement Individuel</div>
-      <ParticipantsResultList />
+      <IndividualResultTable />
     </>
   );
 }
