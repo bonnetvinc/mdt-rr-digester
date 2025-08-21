@@ -15,7 +15,7 @@ function DisplayResults() {
             <div className="text-right text-sm">
               <div className="flex items-center gap-1 text-xl">
                 <Clock className="h-4 w-4 " />
-                {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                {/* {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} */}
               </div>
             </div>
           </div>
