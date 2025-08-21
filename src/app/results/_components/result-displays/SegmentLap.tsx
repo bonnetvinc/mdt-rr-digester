@@ -44,7 +44,7 @@ function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
         <div className="text-xs">
           <span className="font-medium">{lapNumber}</span>
           <span className="ml-1 text-gray-400">
-            {lap.endtime ? formatTime(lap.endtime - lap.starttime) : formatTime(lap.starttime)}
+            {lap.endtime ? formatTime(lap.endtime - lap.starttime) : "--:--"}
           </span>
         </div>
       </div>
