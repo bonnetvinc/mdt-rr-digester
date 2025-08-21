@@ -73,8 +73,15 @@ async function computeUserLap(input: RawPassingInput) {
       });
     }
   } else if (isStartBoundary) {
-     openLap = await db.lap.create({
+    openLap = await db.lap.create({
       data: { participantId: participant.id, startTimestamp: convertedInput.timeinseconds }
+    });
+    await db.lapEvent.create({
+      data: {
+        lapId: openLap.id,
+        segmentId: segment.id,
+        timestamp: convertedInput.timeinseconds
+      }
     });
   }
 
