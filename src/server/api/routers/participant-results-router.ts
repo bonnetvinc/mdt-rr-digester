@@ -16,5 +16,9 @@ export const participantResultsRouter = createTRPCRouter({
       }
     });
     return results;
+  }),
+  getAllParticipants: publicProcedure.query(async ({ ctx }) => {
+    const participants = await ctx.db.participant.findMany();
+    return participants;
   })
 });

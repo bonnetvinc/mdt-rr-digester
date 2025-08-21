@@ -3,7 +3,8 @@ import { PrismaClient, SegmentType } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Reset the DB
+  // // Reset the DB
+  // await prisma.lapEvent.deleteMany();
   // await prisma.lap.deleteMany();
   // await prisma.participant.deleteMany();
   // await prisma.team.deleteMany();
@@ -44,47 +45,27 @@ async function main() {
 
   const segments = await prisma.segment.findMany();
 
-  // Crée ou récupère Team A
-  const teamA = await prisma.team.upsert({
-    where: { transponder: 1111 },
-    update: {}, // pas de mise à jour
-    create: {
-      name: 'Team A',
-      transponder: 1111
-    }
-  });
-
-  // Crée ou récupère Team B
-  const teamB = await prisma.team.upsert({
-    where: { transponder: 2222 },
-    update: {},
-    create: {
-      name: 'Team B',
-      transponder: 2222
-    }
-  });
-
   // Crée les participants
   const [alice, bob, charlie, diana] = await Promise.all([
     prisma.participant.upsert({
       where: { bib: 101 },
       update: {},
-      create: { bib: 101, name: 'Alice', teamId: teamA.id }
+      create: { bib: 101, name: 'Alice', team: 'les A', contest: 'Contest 1' }
     }),
     prisma.participant.upsert({
       where: { bib: 102 },
       update: {},
-      create: { bib: 102, name: 'Bob', teamId: teamA.id }
+      create: { bib: 102, name: 'Bob', team: 'les B', contest: 'Contest 1' }
     }),
     prisma.participant.upsert({
       where: { bib: 201 },
       update: {},
-      create: { bib: 201, name: 'Charlie', teamId: teamB.id }
+      create: { bib: 201, name: 'Charlie', team: 'les B', contest: 'Contest 1' }
     }),
     prisma.participant.upsert({
       where: { bib: 202 },
       update: {},
-      create: { bib: 202, name: 'Diana', teamId: teamB.id }
+      create: { bib: 202, name: 'Diana', team: 'les B', contest: 'Contest 2' }
     })
   ]);
 
@@ -99,9 +80,7 @@ async function main() {
       endTimestamp: now + 600, // 10 min plus tard
       participantId: alice.id,
       events: {
-        create: [
-          { segmentId: segments.find(s => s.name === 'Rockgarden Master')!.id, timestamp: now + 300 },
-        ]
+        create: [{ segmentId: segments.find(s => s.name === 'Rockgarden Master')!.id, timestamp: now + 300 }]
       }
     }
   });
@@ -111,7 +90,7 @@ async function main() {
     data: {
       startTimestamp: now + 100,
       endTimestamp: now + 700,
-      participantId: bob.id,
+      participantId: bob.id
     }
   });
 
@@ -122,9 +101,7 @@ async function main() {
       endTimestamp: now + 800,
       participantId: charlie.id,
       events: {
-        create: [
-          { segmentId: segments.find(s => s.name === 'Dual Sprint')!.id, timestamp: now + 400 },
-        ]
+        create: [{ segmentId: segments.find(s => s.name === 'Dual Sprint')!.id, timestamp: now + 400 }]
       }
     }
   });
@@ -135,9 +112,7 @@ async function main() {
       endTimestamp: now + 1500,
       participantId: charlie.id,
       events: {
-        create: [
-          { segmentId: segments.find(s => s.name === 'Expert')!.id, timestamp: now + 1100 },
-        ]
+        create: [{ segmentId: segments.find(s => s.name === 'Expert')!.id, timestamp: now + 1100 }]
       }
     }
   });
@@ -151,13 +126,13 @@ async function main() {
       events: {
         create: [
           { segmentId: segments.find(s => s.name === 'Two')!.id, timestamp: now + 500 },
-          { segmentId: segments.find(s => s.name === 'Rockgarden Master')!.id, timestamp: now + 700 },
+          { segmentId: segments.find(s => s.name === 'Rockgarden Master')!.id, timestamp: now + 700 }
         ]
       }
     }
   });
 
-    // Alice : START → BONUS 1 → FINISH
+  // Alice : START → BONUS 1 → FINISH
   const lapAliceOuvert = await prisma.lap.create({
     data: {
       startTimestamp: now,
@@ -175,8 +150,6 @@ async function main() {
       participantId: bob.id
     }
   });
-
-
 
   const lapCharlieOouvert = await prisma.lap.create({
     data: {
@@ -201,8 +174,6 @@ async function main() {
       }
     }
   });
-
-  
 
   console.log('✅ Seed completed');
 }

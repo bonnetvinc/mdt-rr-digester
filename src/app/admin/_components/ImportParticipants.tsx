@@ -5,9 +5,11 @@ import { Button } from '~/components/ui/button';
 import { api } from '~/trpc/react';
 
 function ImportParticipants() {
+  const utils = api.useUtils();
   const { mutate: importParticipants } = api.adminActions.importParticipants.useMutation({
     onSuccess: () => {
       toast.success('Participants imported successfully');
+      utils.participantResults.getAllParticipants.invalidate();
     },
     onError: (error: any) => {
       console.error('Error importing participants:', error);

@@ -1,12 +1,13 @@
 type Participant = {
   Bib: number;
   Name: string;
-  Club: string;
-  Equipe: string;
+  Team: string;
+  ContestName: string;
 };
 
-export async function fetchParticipants() {
-  const url = 'https://api.raceresult.com/353920/F3KQ7PXT4GQ7D2GVM68WN9R7EJKBZZMB';
+const defaultUrl = 'https://api.raceresult.com/353920/F3KQ7PXT4GQ7D2GVM68WN9R7EJKBZZMB';
+
+export async function fetchParticipants(url = defaultUrl): Promise<Participant[]> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Erreur API: ${response.status}`);

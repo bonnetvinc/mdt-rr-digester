@@ -25,12 +25,14 @@ export const adminActionRouter = createTRPCRouter({
           where: { bib: p.Bib },
           create: {
             bib: p.Bib,
-            name: p.Name
-            // team: p.Club
+            name: p.Name,
+            team: p.Team,
+            contest: p.ContestName
           },
           update: {
-            name: p.Name
-            // team: p.Club
+            name: p.Name,
+            team: p.Team,
+            contest: p.ContestName
           }
         })
       )

@@ -11,20 +11,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Team {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique
-  transponder  Int           @unique
-  participants Participant[]
-}
+
 
 model Participant {
   id        Int        @id @default(autoincrement())
   bib       Int        @unique
   name      String?
   laps      Lap[]
-  team      Team?      @relation(fields: [teamId], references: [id])
-  teamId    Int?
+  team      String?
+  contest   String     @default("")
 }
 
 model Lap {
@@ -47,6 +42,7 @@ model Segment {
   points      Int           @default(0)   // points attribués quand on passe dessus
   distance    Float         @default(0)
   elevation   Float         @default(0)
+  color       String        @default("gray")
   events      LapEvent[]
 }
 

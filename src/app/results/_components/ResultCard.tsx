@@ -24,6 +24,7 @@ export type ResultSegment = {
   equipmentId: string;
   label: string;
   points: number;
+  color?: string; // Optional color for bonus segments
 };
 
 const getPositionIcon = (position: number) => {
@@ -56,23 +57,28 @@ function ResultCard({
   return (
     <div
       key={id}
-      className="group relative flex flex-col rounded-lg border border-slate-200 bg-white shadow-sm transition-transform duration-200 hover:scale-[1.02]"
+      className="group relative flex flex-col rounded-lg border border-slate-200 bg-white shadow-sm transition-transform duration-200 hover:scale-[1.01]"
     >
-      {/* Barre verticale pour la position */}
-      <div className={`absolute top-0 left-0 h-full w-1 ${position <= 3 ? 'bg-yellow-400' : 'bg-slate-300'}`}></div>
-
-      {/* Ligne principale : position + infos */}
-      <div className="flex items-center justify-between p-2 pl-4">
-        {/* Position */}
-        <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 font-bold text-white text-xs shadow-sm">
+      {/* Ligne principale */}
+      <div className="flex items-center justify-between px-3 py-2">
+        {/* Position + équipe */}
+        <div className="flex min-w-[160px] items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-800 text-white shadow-sm">
             {getPositionIcon(position)}
           </div>
-          <span className="font-semibold text-slate-800 text-sm">{teamName}</span>
+          <span className="truncate font-semibold text-slate-800 text-sm">{teamName}</span>
+          {participantBib && <span className="text-slate-400 text-xs">#{participantBib}</span>}
         </div>
 
-        {/* Stats principales */}
-        <div className="flex items-center gap-3 text-slate-600 text-xs">
+        {/* Tours */}
+        <div className="flex flex-1 items-center justify-center gap-3 px-4">
+          {lastLap?.starttime ? <SegmentLap lap={lastLap} lapNumber={finishedLaps} /> : '-'}
+          {lastLap && currentLap && <div className="text-slate-300">|</div>}
+          {currentLap?.starttime ? <SegmentLap lap={currentLap} lapNumber={finishedLaps + 1} /> : '-'}
+        </div>
+
+        {/* Stats */}
+        <div className="flex min-w-[220px] items-center justify-end gap-4 text-slate-600 text-xs">
           <div className="flex items-center gap-1">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
             <span>{finishedLaps}</span>
@@ -85,24 +91,10 @@ function ResultCard({
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
             <span>{totalElevation ?? 0} m</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 font-bold">
             <div className="h-2 w-2 rounded-full bg-blue-600"></div>
-            <span className="font-bold">{totalPoints ?? 0} pts</span>
+            <span>{totalPoints ?? 0} pts</span>
           </div>
-        </div>
-      </div>
-
-      {/* Tours */}
-      <div className="flex flex-row items-center gap-2 border-slate-100 border-t px-1 py-1">
-        {/* Dernier tour */}
-        <div className="flex-1">{lastLap && <SegmentLap title="" participantBib={participantBib} lap={lastLap} />}</div>
-
-        {/* Séparateur */}
-        {lastLap && currentLap && <div className="flex-shrink-0 px-2 text-center text-slate-300">|</div>}
-
-        {/* Tour actuel */}
-        <div className="flex flex-1 justify-end px-2">
-          {currentLap && <SegmentLap title="" participantBib={participantBib} lap={currentLap} />}
         </div>
       </div>
     </div>
