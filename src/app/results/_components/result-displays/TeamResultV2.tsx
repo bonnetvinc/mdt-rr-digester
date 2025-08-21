@@ -30,7 +30,7 @@ function TeamResultV2() {
         </div>
 
         {/* Results Rows */}
-        {data?.slice(0, 10).map((participant, index) => {
+        {data?.map((participant, index) => {
           const finishedLapsList = participant.laps.filter(lap => lap.endTimestamp != null);
           const finishedLaps = finishedLapsList.length;
 
