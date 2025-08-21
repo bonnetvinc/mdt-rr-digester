@@ -105,9 +105,9 @@ function TeamResultV2() {
 
               <div className="col-span-1 text-center">
                 <div
-                  className={`rounded px-2 py-1 font-bold text-xs ${index === 0 ? 'bg-yellow-600 text-white' : ''} ${index === 1 ? 'bg-gray-500 text-white' : ''} ${index === 2 ? 'bg-orange-600 text-white' : ''} ${index > 2 ? 'bg-green-600 text-white' : ''} `}
+                  className={`rounded px-2 py-1 font-bold text-sm ${index === 0 ? 'bg-yellow-600 text-white' : ''} ${index === 1 ? 'bg-gray-500 text-white' : ''} ${index === 2 ? 'bg-orange-600 text-white' : ''} ${index > 2 ? 'bg-green-600 text-white' : ''} `}
                 >
-                  {participant.totalPoints}
+                  {participant.totalPoints} Pts
                 </div>
               </div>
             </div>

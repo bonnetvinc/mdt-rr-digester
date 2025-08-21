@@ -23,10 +23,11 @@ function SegmentLap({ lap, lapNumber }: SegmentLapProps) {
   };
 
   const isActive = !lap.endtime;
+  const isStarted = lap.starttime > 0;
 
-  if (isActive) {
+  if (isStarted) {
     // Do something for active lap
-    return '--:--';
+    return '-';
   }
 
   return (
