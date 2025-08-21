@@ -35,7 +35,7 @@ export const participantResultsRouter = createTRPCRouter({
 
     // Calculer totalPoints pour chaque participant sans muter l'objet original
     const participantsWithStats = results?.map(participant => {
-      const totals = participant.laps.reduce(
+      const totals = participant.laps.filter(lap => lap.endTimestamp !== null).reduce(
         (acc, lap) => {
           lap.events.forEach(event => {
             if (event.segment) {
