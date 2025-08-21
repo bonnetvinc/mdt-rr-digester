@@ -1,4 +1,4 @@
-import { Clock, Link } from 'lucide-react';
+import { Link } from 'lucide-react';
 import TeamResultV2 from '../_components/result-displays/TeamResultV2';
 
 function DisplayResults() {

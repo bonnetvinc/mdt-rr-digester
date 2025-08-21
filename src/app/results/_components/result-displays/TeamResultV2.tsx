@@ -1,5 +1,5 @@
 'use client';
-import { FlagTriangleRightIcon, GaugeCircleIcon } from 'lucide-react';
+import { FlagTriangleRightIcon, GaugeCircleIcon, MountainSnowIcon } from 'lucide-react';
 import { api } from '~/trpc/react';
 import PositionMarker from './PositionMarker';
 import SegmentLap from './SegmentLap';
@@ -99,7 +99,7 @@ function TeamResultV2() {
               <div className="col-span-1 text-center">
                 <div className="flex items-center justify-center gap-1">
                   <span className="font-bold text-green-400">{participant.totalElevation}</span>
-                  <GaugeCircleIcon className="h-3 w-3 text-green-400" />
+                  <MountainSnowIcon className="h-3 w-3 text-green-400" />
                 </div>
               </div>
 
