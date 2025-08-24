@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Toaster } from '~/components/ui/sonner';
 
 export default async function Home() {
   return (
@@ -23,7 +22,6 @@ export default async function Home() {
           </li>
         </ul>
       </nav>
-      <Toaster />
     </main>
   );
 }

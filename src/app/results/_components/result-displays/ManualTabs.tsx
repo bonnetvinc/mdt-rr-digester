@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { api } from '~/trpc/react';
 import TeamResults from './TeamResults';
@@ -13,13 +13,19 @@ function ManualTabs() {
     { refetchOnWindowFocus: true, enabled: !!activeTab }
   );
 
+  useEffect(() => {
+    if (categories) {
+      setActiveTab(categories[0] ?? '');
+    }
+  }, [categories]);
+
   if (!categories) return null;
 
   if (isLoadingCategories) return <div className="text-center text-gray-500">Chargement des catégories...</div>;
 
   return (
     <div className="px-4 text-center">
-      <Tabs defaultValue={categories?.[0]} className="flex w-full justify-center py-4">
+      <Tabs defaultValue={activeTab} className="flex w-full justify-center py-4">
         <TabsList>
           {categories?.map(category => (
             <TabsTrigger

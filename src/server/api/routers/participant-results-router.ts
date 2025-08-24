@@ -4,13 +4,31 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 export const participantResultsRouter = createTRPCRouter({
   getParticipantsCategories: publicProcedure.query(async ({ ctx }) => {
     const categories = await ctx.db.participant.findMany({
-      distinct: ['contest'], // 👈 déduplique directement en SQL
+      distinct: ['contest'],
       select: {
         contest: true
       }
     });
 
     return categories.map(c => c.contest);
+  }),
+
+  getParticipantResult: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    const result = await ctx.db.participant.findUnique({
+      where: { id: input },
+      include: {
+        laps: {
+          include: {
+            events: {
+              include: {
+                segment: true
+              }
+            }
+          }
+        }
+      }
+    });
+    return result;
   }),
 
   getParticipantsResults: publicProcedure.query(async ({ ctx }) => {

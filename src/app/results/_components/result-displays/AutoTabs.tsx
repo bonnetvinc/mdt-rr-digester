@@ -63,10 +63,6 @@ export default function AutoTabs({ categories, timerDelayDefault, pageSize }: Au
 
   return (
     <div className="relative px-4 text-center">
-      <div className="absolute top-4 right-4">
-        <ClockIcon className="h-5 w-5 animate-spin-slow text-green-500" />
-      </div>
-
       <Tabs value={activeTab} className="flex w-full justify-center py-4" onValueChange={setActiveTab}>
         <TabsList className="flex space-x-2">
           {categories.map(category => (
