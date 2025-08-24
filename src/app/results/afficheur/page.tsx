@@ -13,7 +13,7 @@ function DisplayResults() {
 
   return (
     <div className="container mx-auto px-2 py-2">
-      <AutoTabs categories={categories ?? []} />
+      <AutoTabs categories={categories ?? []} timerDelayDefault={10000} pageSize={10} />
     </div>
   );
 }
