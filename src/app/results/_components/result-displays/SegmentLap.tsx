@@ -1,4 +1,4 @@
-import { FlagTriangleRightIcon, Star } from 'lucide-react';
+import { FlagTriangleRightIcon } from 'lucide-react';
 
 interface SegmentLapProps {
   lap: {
@@ -14,9 +14,32 @@ interface SegmentLapProps {
 
 function SegmentLap({ lap }: SegmentLapProps) {
   function formatTime(seconds: number) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = (seconds % 60).toFixed(2).padStart(5, '0');
-    return `${minutes}:${remainingSeconds}`;
+    // const minutes = Math.floor(seconds / 60);
+    // const remainingSeconds = (seconds % 60).toFixed(2).padStart(5, '0');
+    // return `${minutes}:${remainingSeconds}`;
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+
+    const pad = (n: number) => n.toString().padStart(2, '0');
+
+    return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
+  }
+
+  function formatTimeHHMMSS(date: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
+  function convertRaceTimestamp(raceStart: string, timestampSeconds: number): string {
+    const startDate = new Date(raceStart);
+    const realTime = new Date(startDate.getTime() + timestampSeconds * 1000);
+    return formatTimeHHMMSS(realTime);
   }
 
   const isActive = !lap.endtime;
@@ -31,7 +54,9 @@ function SegmentLap({ lap }: SegmentLapProps) {
       <FlagTriangleRightIcon className={`mr-2 h-3 w-3 ${isActive ? 'animate-pulse text-red-500' : 'text-green-500'}`} />
 
       <span className="min-w-[50px] text-right text-gray-400 text-xs">
-        {lap.endtime ? formatTime(lap.endtime - lap.starttime) : '--:--'}
+        {lap.endtime
+          ? formatTime(lap.endtime - lap.starttime)
+          : `à ${convertRaceTimestamp('2025-08-24T12:00:00', lap.starttime)}`}
       </span>
 
       {lap.segments && lap.segments.length > 0 && (

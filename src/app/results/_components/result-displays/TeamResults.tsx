@@ -22,8 +22,8 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
         <div className="col-span-1 text-start">Position</div>
         <div className="col-span-2 text-start">Coureur</div>
         <div className="col-span-1 text-start">Plaque</div>
-        <div className="col-span-2 text-start">Dernier tour</div>
-        <div className="col-span-2 text-start">En Cours</div>
+        <div className="col-span-2 text-start">Précédent tour</div>
+        <div className="col-span-2 text-start">Dernier départ</div>
         <div className="col-span-1 text-start">Tours</div>
         <div className="col-span-1 text-start">Distance</div>
         <div className="col-span-1 text-start">Dénivelé</div>
