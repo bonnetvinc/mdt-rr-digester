@@ -19,15 +19,15 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
     <div className="overflow-hidden rounded-lg bg-gray-900">
       {/* Table Header */}
       <div className="hidden grid-cols-12 gap-2 bg-gradient-to-r from-green-700 via-orange-700 to-red-700 px-4 py-2 font-bold text-xs sm:grid">
-        <div className="col-span-1">Position</div>
-        <div className="col-span-2">Coureur</div>
-        <div className="col-span-1">Plaque</div>
-        <div className="col-span-2">Dernier tour</div>
-        <div className="col-span-2">En Cours</div>
-        <div className="col-span-1">Tours</div>
-        <div className="col-span-1">Distance</div>
-        <div className="col-span-1">Dénivelé</div>
-        <div className="col-span-1">Pts</div>
+        <div className="col-span-1 text-start">Position</div>
+        <div className="col-span-2 text-start">Coureur</div>
+        <div className="col-span-1 text-start">Plaque</div>
+        <div className="col-span-2 text-start">Dernier tour</div>
+        <div className="col-span-2 text-start">En Cours</div>
+        <div className="col-span-1 text-start">Tours</div>
+        <div className="col-span-1 text-start">Distance</div>
+        <div className="col-span-1 text-start">Dénivelé</div>
+        <div className="col-span-1 text-start">Pts</div>
       </div>
 
       {/* Results Rows */}
@@ -74,11 +74,11 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
               <PositionMarker position={participant.position} />
             </div>
 
-            <div className="col-span-1 sm:col-span-2">
+            <div className="col-span-1 text-start sm:col-span-2">
               <div className="truncate font-bold text-white">{participant.name}</div>
             </div>
 
-            <div className="col-span-2 font-mono text-orange-400 sm:col-span-1">{participant.bib}</div>
+            <div className="col-span-2 text-start font-mono text-orange-400 sm:col-span-1">{participant.bib}</div>
 
             <div className="col-span-1 sm:col-span-2">
               <SegmentLap lap={lastLapData} />
@@ -88,28 +88,28 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
               <SegmentLap lap={currentLapData} />
             </div>
 
-            <div className="col-span-1 text-center">
+            <div className="col-span-1 text-start">
               <div className="flex items-center justify-start gap-1">
                 <FlagIcon className="h-3 w-3 text-red-400" />
                 <span className="font-bold text-red-400">{finishedLaps}</span>
               </div>
             </div>
 
-            <div className="col-span-1 text-center">
+            <div className="col-span-1 text-start">
               <div className="flex items-center justify-start gap-1">
                 <GaugeCircleIcon className="h-3 w-3 text-orange-400" />
                 <span className="font-bold text-orange-400">{participant.totalDistance} km</span>
               </div>
             </div>
 
-            <div className="col-span-1 text-center">
+            <div className="col-span-1 text-start">
               <div className="flex items-center justify-start gap-1">
                 <MountainSnowIcon className="h-3 w-3 text-green-400" />
                 <span className="font-bold text-green-400">{participant.totalElevation} m</span>
               </div>
             </div>
 
-            <div className="col-span-1 text-center">
+            <div className="col-span-1 text-start">
               <div
                 className={`rounded px-2 py-1 font-bold text-sm ${participant.position === 1 ? 'bg-yellow-600 text-white' : ''} 
                     ${participant.position === 2 ? 'bg-gray-500 text-white' : ''} 
