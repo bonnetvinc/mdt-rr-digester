@@ -65,3 +65,9 @@ enum SegmentType {
   FINISH
   BONUS
 }
+
+model DisplaySettings {
+  id          String  @id @default(cuid())
+  timerDelay  Int     @default(8000)
+  pageSize    Int     @default(10)
+}

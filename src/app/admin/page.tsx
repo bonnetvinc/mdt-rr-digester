@@ -1,5 +1,6 @@
 import { Card } from '~/components/ui/card';
 import ClearAllDatas from './_components/ClearAllDatas';
+import DisplaySettingsForm from './_components/display-settings/DisplaySettings';
 import ImportParticipants from './_components/ImportParticipants';
 import ManageSegment from './_components/ManageSegment';
 import ParticipantList from './_components/ParticipantList';
@@ -12,6 +13,11 @@ function page() {
         <Card className="flex-1 rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
           <h2 className="mb-4 font-semibold text-slate-600 text-xl">Données</h2>
           <ClearAllDatas />
+        </Card>
+
+        <Card className="flex-1 rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
+          <h2 className="mb-4 font-semibold text-slate-600 text-xl">Display settings</h2>
+          <DisplaySettingsForm />
         </Card>
 
         <Card className="flex-1 rounded-xl border border-slate-200 bg-white p-6 shadow-lg">

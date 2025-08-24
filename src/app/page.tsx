@@ -23,7 +23,7 @@ export default async function Home() {
           </li>
         </ul>
       </nav>
-      <Toaster richColors />
+      <Toaster />
     </main>
   );
 }
