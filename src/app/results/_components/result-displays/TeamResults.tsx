@@ -1,27 +1,21 @@
 'use client';
 import { FlagIcon, GaugeCircleIcon, MountainSnowIcon } from 'lucide-react';
-import { api } from '~/trpc/react';
 import PositionMarker from './PositionMarker';
+import type { ResultDisplayProps } from './ResultDisplay';
 import SegmentLap from './SegmentLap';
 
-type TeamResultV2Props = {
-  contest?: string;
-};
+interface TeamResultsProps {
+  data: ResultDisplayProps;
+  isLoading: boolean;
+}
 
-function TeamResultV2({ contest }: TeamResultV2Props) {
-  const { data, isLoading } = api.participantResults.getSortedParticipantsResults.useQuery(
-    { contest },
-    {
-      refetchOnWindowFocus: true
-    }
-  );
-
+function TeamResults({ data, isLoading }: TeamResultsProps) {
   if (isLoading) {
     return <div className="text-center text-gray-500">Chargement des résultats...</div>;
   }
 
   return (
-    <div className="container mx-auto px-2 py-2">
+
       <div className="overflow-hidden rounded-lg bg-gray-900">
         {/* Table Header */}
         <div className="hidden grid-cols-12 gap-2 bg-gradient-to-r from-green-700 via-orange-700 to-red-700 px-4 py-2 font-bold text-xs sm:grid">
@@ -37,7 +31,7 @@ function TeamResultV2({ contest }: TeamResultV2Props) {
         </div>
 
         {/* Results Rows */}
-        {data?.map((participant, index) => {
+        {data?.map(participant => {
           const finishedLapsList = participant.laps.filter(lap => lap.endTimestamp != null);
           const finishedLaps = finishedLapsList.length;
 
@@ -64,19 +58,19 @@ function TeamResultV2({ contest }: TeamResultV2Props) {
           const lastLapData = mapLap(lastFinishedLap);
           const currentLapData = mapLap(currentLap, true);
 
-          const isTopThree = index < 3;
+          const isTopThree = participant.position <= 3;
 
           return (
             <div
               key={participant.id}
               className={`grid grid-cols-2 items-center gap-2 border-gray-800 border-b px-4 py-2 text-sm transition-colors hover:bg-gray-800 sm:grid-cols-12 ${isTopThree ? 'bg-gradient-to-r' : 'bg-gray-900'} 
-                ${index === 0 ? 'border-l-4 border-l-yellow-400 from-yellow-900/20 to-transparent' : ''} 
-                ${index === 1 ? 'border-l-4 border-l-gray-400 from-gray-700/20 to-transparent' : ''} 
-                ${index === 2 ? 'border-l-4 border-l-orange-400 from-orange-900/20 to-transparent' : ''}`}
+                ${participant.position === 1 ? 'border-l-4 border-l-yellow-400 from-yellow-900/20 to-transparent' : ''} 
+                ${participant.position === 2 ? 'border-l-4 border-l-gray-400 from-gray-700/20 to-transparent' : ''} 
+                ${participant.position === 3 ? 'border-l-4 border-l-orange-400 from-orange-900/20 to-transparent' : ''}`}
             >
               {/* Position */}
               <div className="col-span-1">
-                <PositionMarker position={index + 1} />
+                <PositionMarker position={participant.position} />
               </div>
 
               {/* Nom */}
@@ -124,10 +118,10 @@ function TeamResultV2({ contest }: TeamResultV2Props) {
               {/* Points */}
               <div className="col-span-1 text-center">
                 <div
-                  className={`rounded px-2 py-1 font-bold text-sm ${index === 0 ? 'bg-yellow-600 text-white' : ''} 
-                    ${index === 1 ? 'bg-gray-500 text-white' : ''} 
-                    ${index === 2 ? 'bg-orange-800 text-white' : ''} 
-                    ${index > 2 ? 'bg-green-600 text-white' : ''}`}
+                  className={`rounded px-2 py-1 font-bold text-sm ${participant.position === 1 ? 'bg-yellow-600 text-white' : ''} 
+                    ${participant.position === 2 ? 'bg-gray-500 text-white' : ''} 
+                    ${participant.position === 3 ? 'bg-orange-800 text-white' : ''} 
+                    ${participant.position > 3 ? 'bg-green-600 text-white' : ''}`}
                 >
                   {participant.totalPoints} Pts
                 </div>
@@ -136,8 +130,7 @@ function TeamResultV2({ contest }: TeamResultV2Props) {
           );
         })}
       </div>
-    </div>
   );
 }
 
-export default TeamResultV2;
+export default TeamResults;

@@ -83,7 +83,13 @@ export const participantResultsRouter = createTRPCRouter({
         return b.totalPoints - a.totalPoints || bFinishedLaps - aFinishedLaps;
       });
 
-      return sortedData;
+      // ajouter la position pour traitement ulterieur
+      const sortedWithPosition = sortedData?.map((participant, index) => ({
+        position: index + 1, // 1-based
+        ...participant
+      }));
+
+      return sortedWithPosition;
     }),
 
   getAllParticipants: publicProcedure.query(async ({ ctx }) => {
