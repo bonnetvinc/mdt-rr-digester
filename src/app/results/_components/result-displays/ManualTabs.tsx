@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { api } from '~/trpc/react';
-import TeamResults from '../result-displays/TeamResults';
+import TeamResults from './TeamResults';
 
 function ManualTabs() {
   const { data: categories, isLoading: isLoadingCategories } =

@@ -1,6 +1,6 @@
 'use client';
 import { api } from '~/trpc/react';
-import AutoTabs from '../_components/result-tabs/AutoTabs';
+import AutoTabs from '../_components/result-displays/AutoTabs';
 
 function DisplayResults() {
   const { data: categories, isLoading } = api.participantResults.getParticipantsCategories.useQuery();

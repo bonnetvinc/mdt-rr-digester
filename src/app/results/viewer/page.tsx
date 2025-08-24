@@ -1,4 +1,4 @@
-import ManualTabs from '../_components/result-tabs/ManualTabs';
+import ManualTabs from '../_components/result-displays/ManualTabs';
 
 function DisplayResults() {
   return (
