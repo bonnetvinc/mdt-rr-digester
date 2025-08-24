@@ -65,40 +65,29 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
             key={participant.id}
             href={`/results/${participant.id}`}
             tabIndex={0}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                router.push(`/results/${participant.id}`);
-              }
-            }}
             className={`grid grid-cols-2 items-center gap-2 border-gray-800 border-b px-4 py-2 text-sm transition-colors hover:bg-gray-800 sm:grid-cols-12 ${isTopThree ? 'bg-gradient-to-r' : 'bg-gray-900'} 
                 ${participant.position === 1 ? 'border-l-4 border-l-yellow-400 from-yellow-900/20 to-transparent' : ''} 
                 ${participant.position === 2 ? 'border-l-4 border-l-gray-400 from-gray-700/20 to-transparent' : ''} 
                 ${participant.position === 3 ? 'border-l-4 border-l-orange-400 from-orange-900/20 to-transparent' : ''}`}
           >
-            {/* Position */}
             <div className="col-span-1">
               <PositionMarker position={participant.position} />
             </div>
 
-            {/* Nom */}
             <div className="col-span-1 sm:col-span-2">
               <div className="truncate font-bold text-white">{participant.name}</div>
             </div>
 
-            {/* Plaque */}
             <div className="col-span-2 font-mono text-orange-400 sm:col-span-1">{participant.bib}</div>
 
-            {/* Dernier tour */}
             <div className="col-span-1 sm:col-span-2">
               <SegmentLap lap={lastLapData} />
             </div>
 
-            {/* En cours */}
             <div className="col-span-1 sm:col-span-2">
               <SegmentLap lap={currentLapData} />
             </div>
 
-            {/* Tours */}
             <div className="col-span-1 text-center">
               <div className="flex items-center justify-start gap-1">
                 <FlagIcon className="h-3 w-3 text-red-400" />
@@ -106,7 +95,6 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
               </div>
             </div>
 
-            {/* Distance */}
             <div className="col-span-1 text-center">
               <div className="flex items-center justify-start gap-1">
                 <GaugeCircleIcon className="h-3 w-3 text-orange-400" />
@@ -114,7 +102,6 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
               </div>
             </div>
 
-            {/* Dénivelé */}
             <div className="col-span-1 text-center">
               <div className="flex items-center justify-start gap-1">
                 <MountainSnowIcon className="h-3 w-3 text-green-400" />
@@ -122,7 +109,6 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
               </div>
             </div>
 
-            {/* Points */}
             <div className="col-span-1 text-center">
               <div
                 className={`rounded px-2 py-1 font-bold text-sm ${participant.position === 1 ? 'bg-yellow-600 text-white' : ''} 

@@ -1,7 +1,7 @@
 'use client';
 import { FlagIcon, GaugeCircleIcon, MountainSnowIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { use } from 'react';
+import { use } from 'react';
 import { Button } from '~/components/ui/button';
 import { api } from '~/trpc/react';
 
@@ -15,7 +15,7 @@ function formatTime(seconds: number) {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
-export function Page({ params }: { params: Promise<PageProps> }) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const idNumber = Number(id);
@@ -126,5 +126,3 @@ export function Page({ params }: { params: Promise<PageProps> }) {
     </div>
   );
 }
-
-export default Page;
