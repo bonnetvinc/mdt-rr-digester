@@ -7,8 +7,13 @@ export default async function Home() {
       <nav className="flex w-full justify-center py-4">
         <ul className="flex gap-6 rounded-lg bg-white/100 px-6 py-2 font-semibold text-lg shadow">
           <li>
-            <Link href="/results/individual" className="hover:underline">
-              Resultats
+            <Link href="/results/afficheur" className="hover:underline">
+              Afficheur
+            </Link>
+          </li>
+          <li>
+            <Link href="/results/viewer" className="hover:underline">
+              Viewer
             </Link>
           </li>
           <li>

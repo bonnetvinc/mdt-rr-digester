@@ -8,7 +8,7 @@ function PositionMarker({ position }: { position: number }) {
       case 2:
         return 'bg-gradient-to-r from-gray-300 to-gray-500 text-white';
       case 3:
-        return 'bg-gradient-to-r from-orange-400 to-orange-600 text-white';
+        return 'bg-gradient-to-r from-amber-700 to-orange-800 text-white';
       default:
         return 'bg-gradient-to-r from-green-500 to-green-600 text-white';
     }
