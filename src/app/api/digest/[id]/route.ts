@@ -86,9 +86,15 @@ async function computeUserLap(input: RawPassingInput) {
   }
 
   if (!isStartBoundary && !isFinishBoundary && openLap) {
-    // For bonus segments only
-    await db.lapEvent.create({
-      data: {
+    await db.lapEvent.upsert({
+      where: {
+        lapId_segmentId: {
+          lapId: openLap.id,
+          segmentId: segment.id
+        }
+      },
+      update: {},
+      create: {
         lapId: openLap.id,
         segmentId: segment.id,
         timestamp: convertedInput.timeinseconds

@@ -3,17 +3,9 @@ import { FlagIcon, GaugeCircleIcon, MountainSnowIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { use } from 'react';
 import { Button } from '~/components/ui/button';
+import { metersToKm } from '~/lib/convertKm';
+import { convertRaceTimestamp, formatTimeHMS } from '~/lib/formatTime';
 import { api } from '~/trpc/react';
-
-interface PageProps {
-  id: string;
-}
-
-function formatTime(seconds: number) {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -33,17 +25,22 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const finishedLaps = participant.laps.filter(l => l.endTimestamp != null);
   const currentLap = participant.laps.find(l => l.endTimestamp == null);
 
-  const totalPoints = participant.laps.reduce((acc, lap) => {
-    return acc + lap.events.reduce((sum, e) => sum + (e.segment.points ?? 0), 0);
-  }, 0);
+  const lapSums = participant.laps
+    .filter(l => l.endTimestamp != null)
+    .map(lap =>
+      lap.events.reduce(
+        (acc, e) => ({
+          points: acc.points + (e.segment.points ?? 0),
+          distance: acc.distance + (e.segment.distance ?? 0),
+          elevation: acc.elevation + (e.segment.elevation ?? 0)
+        }),
+        { points: 0, distance: 0, elevation: 0 }
+      )
+    );
 
-  const totalDistance = participant.laps.reduce((acc, lap) => {
-    return acc + lap.events.reduce((sum, e) => sum + (e.segment.distance ?? 0), 0);
-  }, 0);
-
-  const totalElevation = participant.laps.reduce((acc, lap) => {
-    return acc + lap.events.reduce((sum, e) => sum + (e.segment.elevation ?? 0), 0);
-  }, 0);
+  const totalPoints = lapSums.reduce((acc, lap) => acc + lap.points, 0);
+  const totalDistance = lapSums.reduce((acc, lap) => acc + lap.distance, 0);
+  const totalElevation = lapSums.reduce((acc, lap) => acc + lap.elevation, 0);
 
   return (
     <div className="mx-auto max-w-3xl space-y-4 rounded-lg bg-gray-900 p-4 text-white shadow-md">
@@ -63,7 +60,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
           <div className="flex items-center gap-2">
             <GaugeCircleIcon className="h-5 w-5 text-orange-400" />
-            <span>{totalDistance} m</span>
+            <span>{metersToKm(totalDistance)} km</span>
           </div>
           <div className="flex items-center gap-2">
             <MountainSnowIcon className="h-5 w-5 text-green-400" />
@@ -79,16 +76,15 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         {finishedLaps.map((lap, idx) => (
           <div key={lap.id} className="flex items-center justify-between rounded-md bg-gray-800 p-2">
             <span>Tour {idx + 1}</span>
-            <span>{formatTime(lap.endTimestamp! - lap.startTimestamp)}</span>
+            <span>{formatTimeHMS(lap.endTimestamp! - lap.startTimestamp)}</span>
             <div className="flex gap-2">
               {lap.events.map(e => (
                 <div
                   key={e.id}
-                  className={`rounded px-2 py-1 font-bold text-white text-xs`}
-                  style={{ backgroundColor: e.segment.color }}
+                  className={`rounded bg-blue-400 px-2 py-1 font-bold text-black text-xs`}
                   title={`${e.segment.name}: ${e.segment.points} pts`}
                 >
-                  {e.segment.points} pts
+                  {e.segment.name} {e.segment.points}pts
                 </div>
               ))}
             </div>
@@ -103,24 +99,25 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           <div className="flex items-center justify-between rounded-md bg-yellow-800 p-2">
             <span>Tour {finishedLaps.length + 1}</span>
             <span>
-              {currentLap.startTimestamp ? formatTime(Date.now() / 1000 - currentLap.startTimestamp) : '--:--'}
+              {currentLap.startTimestamp
+                ? convertRaceTimestamp('2025-08-24T12:00:00', currentLap.startTimestamp)
+                : '--:--'}
             </span>
             <div className="flex gap-2">
               {currentLap.events.map(e => (
                 <div
                   key={e.id}
-                  className={`rounded px-2 py-1 font-bold text-white text-xs`}
-                  style={{ backgroundColor: e.segment.color }}
+                  className={`rounded bg-blue-400 px-2 py-1 font-bold text-black text-xs`}
                   title={`${e.segment.name}: ${e.segment.points} pts`}
                 >
-                  {e.segment.points} pts
+                  {e.segment.name} {e.segment.points}pts
                 </div>
               ))}
             </div>
           </div>
         </div>
       )}
-      <Button onClick={() => router.back()} className="mb-4">
+      <Button  onClick={() => router.back()} className="mb-4 bg-blue-400">
         Retour
       </Button>
     </div>

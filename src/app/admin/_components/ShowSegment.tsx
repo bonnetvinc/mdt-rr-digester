@@ -43,44 +43,73 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
   };
 
   return (
-    <div className="flex w-full items-center gap-2 border-slate-200 border-b px-2 py-1">
+    <div className="flex w-full flex-wrap items-center gap-2 border-slate-200 border-b px-2 py-2">
       {isEditing ? (
-        <>
-          <input
-            className="w-32 rounded border px-1 py-0.5 text-sm"
-            value={formData.name}
-            onChange={e => handleChange('name', e.target.value)}
-          />
-          <input
-            className="w-32 rounded border px-1 py-0.5 text-sm"
-            value={formData.equipmentId ?? ''}
-            onChange={e => handleChange('equipmentId', e.target.value)}
-          />
-          <input
-            className="w-32 rounded border px-1 py-0.5 text-sm"
-            value={formData.type}
-            onChange={e => handleChange('type', e.target.value)}
-          />
-          <input
-            className="w-16 rounded border px-1 py-0.5 text-sm"
-            type="number"
-            value={formData.points}
-            onChange={e => handleChange('points', Number(e.target.value))}
-          />
-          <input
-            className="w-16 rounded border px-1 py-0.5 text-sm"
-            type="number"
-            value={formData.distance}
-            onChange={e => handleChange('distance', Number(e.target.value))}
-          />
-          <input
-            className="w-16 rounded border px-1 py-0.5 text-sm"
-            type="number"
-            value={formData.elevation}
-            onChange={e => handleChange('elevation', Number(e.target.value))}
-          />
-
-          <div className="ml-auto flex gap-1">
+        <div className="flex w-full flex-wrap gap-2">
+          <div className="flex min-w-[120px] flex-col">
+            <label htmlFor="name" className="font-medium text-sm">
+              Name
+            </label>
+            <input
+              className="rounded border px-1 py-0.5 text-sm"
+              value={formData.name}
+              onChange={e => handleChange('name', e.target.value)}
+            />
+          </div>
+          <div className="flex min-w-[120px] flex-col">
+            <label htmlFor="equipmentId" className="font-medium text-sm">
+              Equipment ID
+            </label>
+            <input
+              className="rounded border px-1 py-0.5 text-sm"
+              value={formData.equipmentId ?? ''}
+              onChange={e => handleChange('equipmentId', e.target.value)}
+            />
+          </div>
+          <div className="flex min-w-[100px] flex-col">
+            <label htmlFor="type" className="font-medium text-sm">
+              Type
+            </label>
+            <input
+              className="rounded border px-1 py-0.5 text-sm"
+              value={formData.type}
+              onChange={e => handleChange('type', e.target.value)}
+            />
+          </div>
+          <div className="flex min-w-[80px] flex-col">
+            <label htmlFor="points" className="font-medium text-sm">
+              Points
+            </label>
+            <input
+              className="rounded border px-1 py-0.5 text-sm"
+              type="number"
+              value={formData.points}
+              onChange={e => handleChange('points', Number(e.target.value))}
+            />
+          </div>
+          <div className="flex min-w-[80px] flex-col">
+            <label htmlFor="distance" className="font-medium text-sm">
+              Distance (m)
+            </label>
+            <input
+              className="rounded border px-1 py-0.5 text-sm"
+              type="number"
+              value={formData.distance}
+              onChange={e => handleChange('distance', Number(e.target.value))}
+            />
+          </div>
+          <div className="flex min-w-[80px] flex-col">
+            <label htmlFor="elevation" className="font-medium text-sm">
+              Elevation (m)
+            </label>
+            <input
+              className="rounded border px-1 py-0.5 text-sm"
+              type="number"
+              value={formData.elevation}
+              onChange={e => handleChange('elevation', Number(e.target.value))}
+            />
+          </div>
+          <div className="mt-2 flex w-full justify-end gap-1">
             <Button
               className="rounded bg-green-500 px-2 py-0.5 text-white text-xs hover:bg-green-600"
               onClick={handleSave}
@@ -96,16 +125,15 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
               Cancel
             </Button>
           </div>
-        </>
+        </div>
       ) : (
-        <>
-          <span className="w-32 font-semibold">{formData.name}</span>
-          <span className="w-32">{formData.equipmentId}</span>
-          <span className="w-16">{formData.type}</span>
-          <span className="w-16">{formData.points} pts</span>
-          <span className="w-16">{formData.distance} m</span>
-          <span className="w-16">{formData.elevation} m</span>
-
+        <div className="flex w-full flex-wrap items-center gap-2">
+          <span className="min-w-[120px] font-semibold">{formData.name}</span>
+          <span className="min-w-[120px]">{formData.equipmentId}</span>
+          <span className="min-w-[100px]">{formData.type}</span>
+          <span className="min-w-[80px]">{formData.points} pts</span>
+          <span className="min-w-[80px]">{formData.distance} m</span>
+          <span className="min-w-[80px]">{formData.elevation} m</span>
           <div className="ml-auto flex gap-1">
             <Button
               onClick={() => setIsEditing(true)}
@@ -122,7 +150,7 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
               Delete
             </Button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

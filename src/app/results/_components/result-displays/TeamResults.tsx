@@ -1,6 +1,7 @@
 'use client';
 import { FlagIcon, GaugeCircleIcon, MountainSnowIcon } from 'lucide-react';
 import Link from 'next/link';
+import { metersToKm } from '~/lib/convertKm';
 import PositionMarker from './PositionMarker';
 import type { ResultDisplayProps } from './ResultDisplay';
 import SegmentLap from './SegmentLap';
@@ -98,7 +99,7 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
             <div className="col-span-1 text-start">
               <div className="flex items-center justify-start gap-1">
                 <GaugeCircleIcon className="h-3 w-3 text-orange-400" />
-                <span className="font-bold text-orange-400">{participant.totalDistance} km</span>
+                <span className="font-bold text-orange-400">{metersToKm(participant.totalDistance)} km</span>
               </div>
             </div>
 

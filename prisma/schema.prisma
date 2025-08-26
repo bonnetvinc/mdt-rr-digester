@@ -12,7 +12,6 @@ datasource db {
 }
 
 
-
 model Participant {
   id        Int        @id @default(autoincrement())
   bib       Int        @unique
@@ -36,14 +35,13 @@ model Lap {
 model Segment {
   id          Int        @id @default(autoincrement())
   name        String     @unique
-  type        SegmentType   // START, FINISH, BONUS
-  equipment   Equipment?    @relation(fields: [equipmentId], references: [id])
-  equipmentId String?
-  points      Int           @default(0)   // points attribués quand on passe dessus
+  type        SegmentType 
+  equipmentId String
+  points      Int           @default(0) 
   distance    Float         @default(0)
   elevation   Float         @default(0)
-  color       String        @default("gray")
   events      LapEvent[]
+
 }
 
 model LapEvent {
@@ -53,11 +51,8 @@ model LapEvent {
   segment     Segment    @relation(fields: [segmentId], references: [id])
   segmentId   Int
   timestamp   Float
-}
 
-model Equipment {
-  id         String     @id 
-  segments   Segment[]
+  @@unique([lapId, segmentId])
 }
 
 enum SegmentType {
