@@ -11,7 +11,7 @@ export const segmentRouter = createTRPCRouter({
       z.object({
         name: z.string().min(1),
         type: z.enum(['START', 'FINISH', 'BONUS']),
-        equipmentId: z.string().nullable().optional(),
+        equipmentId: z.string(),
         points: z.number().int().default(0),
         distance: z.number().default(0),
         elevation: z.number().default(0)
@@ -42,7 +42,7 @@ export const segmentRouter = createTRPCRouter({
         data: z.object({
           name: z.string().min(1),
           type: z.enum(['START', 'FINISH', 'BONUS']),
-          equipmentId: z.string().nullable().optional(),
+          equipmentId: z.string(),
           points: z.number().int().default(0),
           distance: z.number().default(0),
           elevation: z.number().default(0)

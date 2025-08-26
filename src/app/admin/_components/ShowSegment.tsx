@@ -6,7 +6,7 @@ import { api } from '~/trpc/react';
 type Segment = {
   id: number;
   name: string;
-  equipmentId: string | null;
+  equipmentId: string;
   points: number;
   type: 'START' | 'FINISH' | 'BONUS';
   distance: number;
@@ -62,7 +62,7 @@ export default function ShowSegment({ segment, handleDelete }: ShowSegmentProps)
             </label>
             <input
               className="rounded border px-1 py-0.5 text-sm"
-              value={formData.equipmentId ?? ''}
+              value={formData.equipmentId}
               onChange={e => handleChange('equipmentId', e.target.value)}
             />
           </div>

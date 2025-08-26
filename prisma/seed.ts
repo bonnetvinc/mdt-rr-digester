@@ -11,18 +11,7 @@ async function main() {
   // await prisma.segment.deleteMany();
   // await prisma.equipment.deleteMany();
 
-  // Crée les équipements prédéfinis
-  const equipmentNames = ['START', 'FINISH', 'BONUS 1', 'BONUS 2', 'BONUS 3', 'BONUS 4'];
 
-  await Promise.all(
-    equipmentNames.map(name =>
-      prisma.equipment.upsert({
-        where: { id: name },
-        update: {}, // rien à mettre à jour
-        create: { id: name }
-      })
-    )
-  );
   // Crée des segments prédéfinis
   await prisma.segment.createMany({
     data: [
