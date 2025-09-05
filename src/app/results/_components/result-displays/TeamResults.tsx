@@ -9,9 +9,10 @@ import SegmentLap from './SegmentLap';
 interface TeamResultsProps {
   data: ResultDisplayProps;
   isLoading: boolean;
+  disabled?: boolean;
 }
 
-function TeamResults({ data, isLoading }: TeamResultsProps) {
+function TeamResults({ data, isLoading, disabled = false }: TeamResultsProps) {
   if (isLoading) {
     return <div className="text-center text-gray-500">Chargement des résultats...</div>;
   }
@@ -61,16 +62,8 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
 
         const isTopThree = participant.position <= 3;
 
-        return (
-          <Link
-            key={participant.id}
-            href={`/results/${participant.id}`}
-            tabIndex={0}
-            className={`grid grid-cols-2 items-center gap-2 border-gray-800 border-b px-4 py-2 text-sm transition-colors hover:bg-gray-800 sm:grid-cols-12 ${isTopThree ? 'bg-gradient-to-r' : 'bg-gray-900'} 
-                ${participant.position === 1 ? 'border-l-4 border-l-yellow-400 from-yellow-900/20 to-transparent' : ''} 
-                ${participant.position === 2 ? 'border-l-4 border-l-gray-400 from-gray-700/20 to-transparent' : ''} 
-                ${participant.position === 3 ? 'border-l-4 border-l-orange-400 from-orange-900/20 to-transparent' : ''}`}
-          >
+        const rowContent = (
+          <>
             <div className="col-span-1">
               <PositionMarker position={participant.position} />
             </div>
@@ -112,14 +105,47 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
 
             <div className="col-span-1 text-start">
               <div
-                className={`rounded px-2 py-1 font-bold text-sm ${participant.position === 1 ? 'bg-yellow-600 text-white' : ''} 
-                    ${participant.position === 2 ? 'bg-gray-500 text-white' : ''} 
-                    ${participant.position === 3 ? 'bg-orange-800 text-white' : ''} 
-                    ${participant.position > 3 ? 'bg-green-600 text-white' : ''}`}
+                className={`rounded px-2 py-1 font-bold text-sm ${
+                  participant.position === 1
+                    ? 'bg-yellow-600 text-white'
+                    : participant.position === 2
+                      ? 'bg-gray-500 text-white'
+                      : participant.position === 3
+                        ? 'bg-orange-800 text-white'
+                        : 'bg-green-600 text-white'
+                }`}
               >
                 {participant.totalPoints} Pts
               </div>
             </div>
+          </>
+        );
+
+        if (disabled) {
+          return (
+            <div
+              className={`grid grid-cols-2 items-center gap-2 border-gray-800 border-b px-4 py-2 text-sm transition-colors hover:bg-gray-800 sm:grid-cols-12 ${isTopThree ? 'bg-gradient-to-r' : 'bg-gray-900'} 
+                ${participant.position === 1 ? 'border-l-4 border-l-yellow-400 from-yellow-900/20 to-transparent' : ''} 
+                ${participant.position === 2 ? 'border-l-4 border-l-gray-400 from-gray-700/20 to-transparent' : ''} 
+                ${participant.position === 3 ? 'border-l-4 border-l-orange-400 from-orange-900/20 to-transparent' : ''}`}
+              aria-disabled="true"
+            >
+              {rowContent}
+            </div>
+          );
+        }
+
+        return (
+          <Link
+            key={participant.id}
+            href={`/results/${participant.id}`}
+            tabIndex={0}
+            className={`grid grid-cols-2 items-center gap-2 border-gray-800 border-b px-4 py-2 text-sm transition-colors hover:bg-gray-800 sm:grid-cols-12 ${isTopThree ? 'bg-gradient-to-r' : 'bg-gray-900'} 
+                ${participant.position === 1 ? 'border-l-4 border-l-yellow-400 from-yellow-900/20 to-transparent' : ''} 
+                ${participant.position === 2 ? 'border-l-4 border-l-gray-400 from-gray-700/20 to-transparent' : ''} 
+                ${participant.position === 3 ? 'border-l-4 border-l-orange-400 from-orange-900/20 to-transparent' : ''}`}
+          >
+            {rowContent}
           </Link>
         );
       })}

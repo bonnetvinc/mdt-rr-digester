@@ -1,6 +1,5 @@
 'use client';
 
-import { ClockIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { api } from '~/trpc/react';
@@ -10,9 +9,10 @@ interface AutoTabsProps {
   categories: string[];
   timerDelayDefault: number;
   pageSize: number;
+  disabled?: boolean;
 }
 
-export default function AutoTabs({ categories, timerDelayDefault, pageSize }: AutoTabsProps) {
+export default function AutoTabs({ categories, timerDelayDefault, pageSize, disabled = false }: AutoTabsProps) {
   const initialTab = categories?.[0] ?? '';
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [page, setPage] = useState(0);
@@ -69,6 +69,7 @@ export default function AutoTabs({ categories, timerDelayDefault, pageSize }: Au
             <TabsTrigger
               key={category}
               value={category}
+              disabled={disabled}
               className="px-4 py-2 font-bold transition-colors data-[state=active]:bg-green-600 data-[state=inactive]:bg-gray-200 data-[state=active]:text-black data-[state=inactive]:text-gray-400"
             >
               {category}
@@ -77,7 +78,7 @@ export default function AutoTabs({ categories, timerDelayDefault, pageSize }: Au
         </TabsList>
 
         <TabsContent value={activeTab}>
-          <TeamResults data={paginatedData} isLoading={isLoading} />
+          <TeamResults data={paginatedData} isLoading={isLoading} disabled/>
         </TabsContent>
       </Tabs>
     </div>
