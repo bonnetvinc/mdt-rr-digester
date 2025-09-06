@@ -19,7 +19,7 @@ function TeamResults({ data, isLoading }: TeamResultsProps) {
   return (
     <div className="overflow-hidden rounded-lg bg-gray-900">
       {/* Table Header */}
-      <div className="hidden grid-cols-12 gap-2 bg-gradient-to-r from-green-700 via-orange-700 to-red-700 px-4 py-2 font-bold text-xs sm:grid">
+      <div className="hidden grid-cols-12 gap-2 bg-gradient-to-r from-green-700 via-orange-700 to-red-700 px-4 py-2 font-bold text-sm sm:grid">
         <div className="col-span-1 text-start">Position</div>
         <div className="col-span-2 text-start">Coureur</div>
         <div className="col-span-1 text-start">Plaque</div>
